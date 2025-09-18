@@ -26,7 +26,7 @@ namespace Server.Services
                     Offer = vm.Offer,
                     Version = vm.Version,
                     DiskISO = vm.DiskISO,
-                    NomMarketing = vm.NomMarketingVM
+                    NomMarketing = vm.NomMarketing
                 })
                 .ToListAsync();
         }
@@ -45,7 +45,7 @@ namespace Server.Services
                 Offer = vm.Offer,
                 Version = vm.Version,
                 DiskISO = vm.DiskISO,
-                NomMarketing = vm.NomMarketingVM
+                NomMarketing = vm.NomMarketing
             };
         }
 
@@ -60,7 +60,7 @@ namespace Server.Services
                 Offer = dto.Offer,
                 Version = dto.Version,
                 DiskISO = dto.DiskISO,
-                NomMarketingVM = dto.NomMarketing
+                NomMarketing = dto.NomMarketing
             };
             _db.MachinesVirtuelles.Add(vm);
             await _db.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace Server.Services
             vm.Offer = dto.Offer;
             vm.Version = dto.Version;
             vm.DiskISO = dto.DiskISO;
-            vm.NomMarketingVM = dto.NomMarketing;
+            vm.NomMarketing = dto.NomMarketing;
             await _db.SaveChangesAsync();
         }
 

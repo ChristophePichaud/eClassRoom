@@ -13,5 +13,6 @@ namespace Shared.Dtos
 
         // Liste des stagiaires dans la salle
         public ICollection<UtilisateurDto> Stagiaires { get; set; } = new List<UtilisateurDto>();
+        public ICollection<MachineVirtuelleDto> Machines { get; set; } = new List<MachineVirtuelleDto>(); // Ajouté
     }
 }

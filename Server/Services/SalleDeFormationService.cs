@@ -56,6 +56,21 @@ namespace Server.Services
                         MotDePasse = u.MotDePasse,
                         Role = u.Role.ToString(),
                         ClientId = u.ClientId
+                    }).ToList(),
+                    Machines = s.Machines.Select(m => new MachineVirtuelleDto
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        TypeOS = m.TypeOS,
+                        TypeVM = m.TypeVM,
+                        Sku = m.Sku,
+                        Offer = m.Offer,
+                        Version = m.Version,
+                        DiskISO = m.DiskISO,
+                        NomMarketing = m.NomMarketing,
+                        FichierRDP = m.FichierRDP,
+                        Supervision = m.Supervision,
+                        StagiaireId = m.StagiaireId
                     }).ToList()
                 })
                 .ToListAsync();
@@ -106,6 +121,21 @@ namespace Server.Services
                     MotDePasse = u.MotDePasse,
                     Role = u.Role.ToString(),
                     ClientId = u.ClientId
+                }).ToList(),
+                Machines = s.Machines.Select(m => new MachineVirtuelleDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    TypeOS = m.TypeOS,
+                    TypeVM = m.TypeVM,
+                    Sku = m.Sku,
+                    Offer = m.Offer,
+                    Version = m.Version,
+                    DiskISO = m.DiskISO,
+                    NomMarketing = m.NomMarketing,
+                    FichierRDP = m.FichierRDP,
+                    Supervision = m.Supervision,
+                    StagiaireId = m.StagiaireId
                 }).ToList()
             };
         }
@@ -150,5 +180,66 @@ namespace Server.Services
             _db.SallesDeFormation.Remove(s);
             await _db.SaveChangesAsync();
         }
+
+        private static SalleDeFormationDto ToDto(SalleDeFormation s)
+        {
+            return new SalleDeFormationDto
+            {
+                Id = s.Id,
+                Nom = s.Nom,
+                ClientId = s.ClientId,
+                Client = s.Client != null ? new ClientDto
+                {
+                    Id = s.Client.Id,
+                    NomSociete = s.Client.NomSociete,
+                    Adresse = s.Client.Adresse,
+                    CodePostal = s.Client.CodePostal,
+                    Ville = s.Client.Ville,
+                    Pays = s.Client.Pays,
+                    EmailAdministrateur = s.Client.EmailAdministrateur,
+                    Mobile = s.Client.Mobile
+                } : null,
+                FormateurId = s.FormateurId,
+                Formateur = s.Formateur != null ? new UtilisateurDto
+                {
+                    Id = s.Formateur.Id,
+                    Email = s.Formateur.Email,
+                    Nom = s.Formateur.Nom,
+                    Prenom = s.Formateur.Prenom,
+                    MotDePasse = s.Formateur.MotDePasse,
+                    Role = s.Formateur.Role.ToString(),
+                    ClientId = s.Formateur.ClientId
+                } : null,
+                DateDebut = s.DateDebut,
+                DateFin = s.DateFin,
+                Stagiaires = s.Stagiaires.Select(u => new UtilisateurDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Nom = u.Nom,
+                    Prenom = u.Prenom,
+                    MotDePasse = u.MotDePasse,
+                    Role = u.Role.ToString(),
+                    ClientId = u.ClientId
+                }).ToList(),
+                Machines = s.Machines?.Select(m => new MachineVirtuelleDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    TypeOS = m.TypeOS,
+                    TypeVM = m.TypeVM,
+                    Sku = m.Sku,
+                    Offer = m.Offer,
+                    Version = m.Version,
+                    DiskISO = m.DiskISO,
+                    NomMarketing = m.NomMarketing, // Utilise le nouveau nom
+                    FichierRDP = m.FichierRDP,
+                    Supervision = m.Supervision,
+                    StagiaireId = m.StagiaireId
+                }).ToList()
+            };
+        }
+
+        // Pour le mapping inverse (FromDto), il faut gérer l'association many-to-many côté service selon la logique métier.
     }
 }

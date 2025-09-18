@@ -135,53 +135,49 @@ namespace Test.CLI
                     Console.WriteLine("No client or admin user found. Run with -a first.");
                     return;
                 }
-                // Exemple d'ajout d'une machine virtuelle liée à la salle via la relation many-to-many
-                var machine = new MachineVirtuelle
+                // Récupère la première machine virtuelle existante
+                var machine = await db.MachinesVirtuelles.FirstOrDefaultAsync();
+                if (machine == null)
                 {
-                    Name = "VM-Test",
-                    TypeOS = "Windows",
-                    TypeVM = "Standard",
-                    Sku = "Standard_B2s",
-                    Offer = "WindowsServer",
-                    Version = "2019-Datacenter",
-                    DiskISO = "iso/path",
-                    NomMarketingVM = "VM Marketing",
-                    FichierRDP = "file.rdp",
-                    Supervision = "Aucune",
-                    StagiaireId = formateur.Id // ou un stagiaire réel
+                    Console.WriteLine("No MachineVirtuelle found in database.");
+                    return;
+                }
+                var machineDto = new MachineVirtuelleDto
+                {
+                    Id = machine.Id,
+                    Name = machine.Name,
+                    TypeOS = machine.TypeOS,
+                    TypeVM = machine.TypeVM,
+                    Sku = machine.Sku,
+                    Offer = machine.Offer,
+                    Version = machine.Version,
+                    DiskISO = machine.DiskISO,
+                    NomMarketing = machine.NomMarketing,
+                    FichierRDP = machine.FichierRDP,
+                    Supervision = machine.Supervision,
+                    StagiaireId = machine.StagiaireId
                 };
-                db.MachinesVirtuelles.Add(machine);
-                await db.SaveChangesAsync();
+
+                // Création d'un stagiaire
+                var stagiaire = new UtilisateurDto
+                {
+                    Email = "stagiaire@samplecorp.com",
+                    Nom = "Stagiaire",
+                    Prenom = "Test",
+                    MotDePasse = "stagiaire123",
+                    Role = RoleUtilisateur.Stagiaire.ToString(),
+                    ClientId = client.Id
+                };
 
                 var salleDto = new SalleDeFormationDto
                 {
                     ClientId = client.Id,
-                    Client = new ClientDto
-                    {
-                        Id = client.Id,
-                        NomSociete = client.NomSociete,
-                        Adresse = client.Adresse,
-                        CodePostal = client.CodePostal,
-                        Ville = client.Ville,
-                        Pays = client.Pays,
-                        EmailAdministrateur = client.EmailAdministrateur,
-                        Mobile = client.Mobile
-                    },
                     Nom = "Salle Test CLI",
                     FormateurId = formateur.Id,
-                    Formateur = new UtilisateurDto
-                    {
-                        Id = formateur.Id,
-                        Email = formateur.Email,
-                        Nom = formateur.Nom,
-                        Prenom = formateur.Prenom,
-                        MotDePasse = formateur.MotDePasse,
-                        Role = formateur.Role.ToString(),
-                        ClientId = formateur.ClientId
-                    },
                     DateDebut = DateTime.UtcNow,
                     DateFin = DateTime.UtcNow.AddDays(1),
-                    Stagiaires = new List<UtilisateurDto>()
+                    Stagiaires = new List<UtilisateurDto> { stagiaire },
+                    Machines = new List<MachineVirtuelleDto> { machineDto }
                 };
                 // Ajout via service (la gestion de l'association many-to-many doit être gérée dans le service)
                 var optionsWithLogging = new DbContextOptionsBuilder<EClassRoomDbContext>()
@@ -198,7 +194,7 @@ namespace Test.CLI
                     if (salle != null)
                     {
                         // Ajout de la relation many-to-many
-                        salle.Machines.Add(machine);
+                        // (optionnel ici, dépend de la logique du service)
                         await dbWithLogging.SaveChangesAsync();
                     }
                 }

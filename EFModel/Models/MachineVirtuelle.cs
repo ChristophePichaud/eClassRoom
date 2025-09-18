@@ -10,12 +10,10 @@ public class MachineVirtuelle
     public string Offer { get; set; }
     public string Version { get; set; }
     public string DiskISO { get; set; }
-    public string NomMarketingVM { get; set; }
+    public string NomMarketing { get; set; } // Garde ce nom en EFModel
     public string FichierRDP { get; set; }
-    public string Supervision { get; set; } // Traces d’utilisation
-
+    public string Supervision { get; set; }
     public int StagiaireId { get; set; }
     public Utilisateur Stagiaire { get; set; }
-
     public ICollection<SalleDeFormation> Salles { get; set; } = new List<SalleDeFormation>();
 }
