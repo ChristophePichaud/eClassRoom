@@ -1,64 +1,89 @@
 @page "/clients"
+@inherits ClientsBase
 
-<PageTitle>Clients</PageTitle>
+<h3>Gestion des clients</h3>
 
-<h3>Liste des clients</h3>
+<button class="btn btn-primary mb-2" @onclick="ShowAddClient">Nouveau client</button>
 
-<button class="btn btn-primary mb-3" @onclick="ToggleForm">@(showForm ? "Annuler" : "Nouveau Client")</button>
-
-@if (showForm)
+@if (isLoading)
 {
-    <EditForm Model="newClient" OnValidSubmit="CreateClientAsync">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="row mb-2">
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.NomSociete" placeholder="Nom de la société" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.Adresse" placeholder="Adresse" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.CodePostal" placeholder="Code Postal" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.Ville" placeholder="Ville" />
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.Pays" placeholder="Pays" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.EmailAdministrateur" placeholder="Email Administrateur" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.Mobile" placeholder="Mobile" />
-            </div>
-            <div class="col">
-                <InputText class="form-control" @bind-Value="newClient.MotDePasseAdministrateur" placeholder="Mot de passe administrateur" type="password" />
-            </div>
-        </div>
-        <button type="submit" class="btn btn-success">Créer</button>
-    </EditForm>
-}
-
-@if (clients == null)
-{
-    <p><em>Chargement...</em></p>
+    <p>Chargement...</p>
 }
 else
 {
-    <BootstrapBlazor.Table TItem="Shared.Dtos.ClientDto" Items="clients">
-        <TableColumns>
-            <TableColumn Field="Id" Title="ID" />
-            <TableColumn Field="NomSociete" Title="Société" />
-            <TableColumn Field="Adresse" Title="Adresse" />
-            <TableColumn Field="CodePostal" Title="Code Postal" />
-            <TableColumn Field="Ville" Title="Ville" />
-            <TableColumn Field="Pays" Title="Pays" />
-            <TableColumn Field="EmailAdministrateur" Title="Email Admin" />
-            <TableColumn Field="Mobile" Title="Mobile" />
-        </TableColumns>
-    </BootstrapBlazor.Table>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nom société</th>
+                <th>Adresse</th>
+                <th>Code postal</th>
+                <th>Ville</th>
+                <th>Pays</th>
+                <th>Email administrateur</th>
+                <th>Mobile</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in clients)
+            {
+                <tr>
+                    <td>@client.NomSociete</td>
+                    <td>@client.Adresse</td>
+                    <td>@client.CodePostal</td>
+                    <td>@client.Ville</td>
+                    <td>@client.Pays</td>
+                    <td>@client.EmailAdministrateur</td>
+                    <td>@client.Mobile</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" @onclick="() => EditClient(client)">Modifier</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteClient(client.Id)">Supprimer</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (showForm)
+{
+    <EditForm Model="editClient" OnValidSubmit="SaveClient">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <h5>@(isEdit ? "Modifier le client" : "Créer un nouveau client")</h5>
+        <div class="mb-2">
+            <label>Nom société</label>
+            <InputText class="form-control" @bind-Value="editClient.NomSociete" />
+        </div>
+        <div class="mb-2">
+            <label>Adresse</label>
+            <InputText class="form-control" @bind-Value="editClient.Adresse" />
+        </div>
+        <div class="mb-2">
+            <label>Code postal</label>
+            <InputText class="form-control" @bind-Value="editClient.CodePostal" />
+        </div>
+        <div class="mb-2">
+            <label>Ville</label>
+            <InputText class="form-control" @bind-Value="editClient.Ville" />
+        </div>
+        <div class="mb-2">
+            <label>Pays</label>
+            <InputText class="form-control" @bind-Value="editClient.Pays" />
+        </div>
+        <div class="mb-2">
+            <label>Email administrateur</label>
+            <InputText class="form-control" @bind-Value="editClient.EmailAdministrateur" />
+        </div>
+        <div class="mb-2">
+            <label>Mobile</label>
+            <InputText class="form-control" @bind-Value="editClient.Mobile" />
+        </div>
+        <div class="mb-2">
+            <label>Mot de passe administrateur</label>
+            <InputText class="form-control" @bind-Value="editClient.MotDePasseAdministrateur" type="password" />
+        </div>
+        <button class="btn btn-success me-2" type="submit">Enregistrer</button>
+        <button class="btn btn-secondary" type="button" @onclick="CancelEdit">Annuler</button>
+    </EditForm>
 }
