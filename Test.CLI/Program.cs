@@ -172,9 +172,10 @@ namespace Test.CLI
                 var salleDto = new SalleDeFormationDto
                 {
                     ClientId = client.Id,
-                    // Client = ... // NE PAS RENSEIGNER pour l'insert
+                    // Ne pas remplir Client ici (pour insert, seul ClientId est utilisé)
                     Nom = "Salle Test CLI",
                     FormateurId = formateur.Id,
+                    // Ne pas remplir Formateur ici (pour insert, seul FormateurId est utilisé)
                     DateDebut = DateTime.UtcNow,
                     DateFin = DateTime.UtcNow.AddDays(1),
                     Stagiaires = new List<UtilisateurDto> { stagiaire },
@@ -194,8 +195,7 @@ namespace Test.CLI
                     var salle = await dbWithLogging.SallesDeFormation.OrderByDescending(s => s.Id).FirstOrDefaultAsync();
                     if (salle != null)
                     {
-                        // Ajout de la relation many-to-many
-                        // (optionnel ici, dépend de la logique du service)
+                        // Ajout de la relation many-to-many si besoin (optionnel ici)
                         await dbWithLogging.SaveChangesAsync();
                     }
                 }
