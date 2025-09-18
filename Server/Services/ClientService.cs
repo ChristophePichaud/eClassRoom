@@ -36,9 +36,9 @@ namespace Server.Services
             return ToDto(entity);
         }
 
-        public async Task<bool> UpdateAsync(ClientDto dto)
+        public async Task<bool> UpdateAsync(int id, ClientDto dto)
         {
-            var entity = await _db.Clients.FindAsync(dto.Id);
+            var entity = await _db.Clients.FindAsync(id);
             if (entity == null) return false;
             entity.NomSociete = dto.NomSociete;
             entity.Adresse = dto.Adresse;

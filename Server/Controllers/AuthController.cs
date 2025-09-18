@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dtos;
 using Server.Services;
+using System;
 
 namespace eClassRoom.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -15,19 +16,25 @@ namespace eClassRoom.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto login)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _authService.ValidateUserAsync(login.Username, login.Password);
+            if (string.IsNullOrEmpty(loginDto.Username) || string.IsNullOrEmpty(loginDto.Password))
+                return Forbid();
+
+            var user = await _authService.ValidateUserAsync(loginDto.Username, loginDto.Password);
             if (user != null)
             {
-                var token = _authService.GenerateJwtToken(user);
-                return Ok(new { token });
+                var (token, expiresAt) = _authService.GenerateJwtTokenWithExpiration(user);
+                var result = new LoginResultDto
+                {
+                    Token = token,
+                    ExpiresAt = expiresAt
+                };
+                return Ok(result);
             }
             return Unauthorized();
         }
 
         // La génération du token est déléguée au service
     }
-
-    // LoginDto est dans Shared.Dtos
 }

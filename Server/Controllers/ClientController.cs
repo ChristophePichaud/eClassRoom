@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/client")]
     [Authorize]
     public class ClientController : ControllerBase
     {
@@ -24,6 +25,40 @@ namespace Server.Controllers
         {
             var clients = await _service.GetAllAsync();
             return Ok(clients);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClientDto>> GetById(int id)
+        {
+            var client = await _service.GetByIdAsync(id);
+            if (client == null)
+                return NotFound();
+            return Ok(client);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ClientDto>> Create(ClientDto dto)
+        {
+            var created = await _service.AddAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, ClientDto dto)
+        {
+            var updated = await _service.UpdateAsync(id, dto);
+            if (updated == null)
+                return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted)
+                return NotFound();
+            return NoContent();
         }
     }
 }

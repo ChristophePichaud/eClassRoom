@@ -1,48 +1,58 @@
-using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Shared.Dtos;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace Client.Pages
 {
-    public partial class Login
+    public partial class Login : ComponentBase
     {
-        [Inject] protected HttpClient Http { get; set; } = default!;
-        [Inject] protected IJSRuntime JS { get; set; } = default!;
+        [Inject] public HttpClient Http { get; set; }
+        [Inject] public NavigationManager Navigation { get; set; }
+        [Inject] public IJSRuntime JS { get; set; } // Ajout de l'injection de JS
 
-        private async Task HandleLogin()
+        protected LoginDto loginModel = new();
+        protected string ErrorMessage { get; set; }
+        protected bool IsLoading { get; set; }
+
+        protected async Task HandleLogin()
         {
-            errorMessage = null;
+            ErrorMessage = null;
+            IsLoading = true;
+
             try
             {
-                var response = await Http.PostAsJsonAsync("/api/auth/login", loginModel);
+                // Appel POST avec loginModel dans le corps de la requête
+                var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
                 if (response.IsSuccessStatusCode)
                 {
-                    var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>();
-                    if (tokenResponse is not null && !string.IsNullOrEmpty(tokenResponse.Token))
+                    var result = await response.Content.ReadFromJsonAsync<LoginResultDto>();
+                    if (result != null && !string.IsNullOrEmpty(result.Token))
                     {
-                        await JS.InvokeVoidAsync("localStorage.setItem", "jwt", tokenResponse.Token);
-                        // Rediriger ou notifier l'utilisateur ici si besoin
+                        // Stockage du token dans le localStorage
+                        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", result.Token);
+                        Navigation.NavigateTo("/");
                     }
                     else
                     {
-                        errorMessage = "RÃ©ponse du serveur invalide.";
+                        ErrorMessage = "Erreur d'authentification.";
                     }
                 }
                 else
                 {
-                    errorMessage = "Identifiants invalides.";
+                    ErrorMessage = "Identifiants invalides.";
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                errorMessage = $"Erreur lors de la connexion : {ex.Message}";
+                ErrorMessage = "Erreur lors de la connexion au serveur.";
             }
-        }
-
-        public class TokenResponse
-        {
-            public string? Token { get; set; }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

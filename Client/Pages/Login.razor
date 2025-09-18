@@ -19,12 +19,8 @@
     <button type="submit" class="btn btn-primary">Se connecter</button>
 </EditForm>
 
-@if (!string.IsNullOrEmpty(errorMessage))
+@if (!string.IsNullOrEmpty(ErrorMessage))
 {
-    <div class="alert alert-danger mt-3">@errorMessage</div>
+    <div class="alert alert-danger mt-3">@ErrorMessage</div>
 }
 
-@code {
-    protected LoginDto loginModel = new();
-    protected string? errorMessage;
-}

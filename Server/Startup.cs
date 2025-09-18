@@ -13,7 +13,8 @@ public class Startup
             options.UseNpgsql("Your_PostgreSQL_Connection_String_Here"));
 
         services.AddControllers();
-    services.AddScoped<Server.Services.AuthService>();
+        services.AddScoped<Server.Services.AuthService>();
+        services.AddSwaggerGen();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -28,12 +29,23 @@ public class Startup
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        app.UseHttpsRedirection();  
         app.UseStaticFiles();
 
         app.UseRouting();
 
         app.UseAuthorization();
+
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+            c.RoutePrefix = string.Empty;
+            c.DocumentTitle = "My Custom API Docs";
+            c.InjectStylesheet("/swagger-custom.css");
+            c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); // or .List, .Full
+            c.DefaultModelRendering(Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Model);
+        });
 
         app.UseEndpoints(endpoints =>
         {

@@ -1,0 +1,88 @@
+@page "/customers"
+@using Shared.Dtos
+
+<h3>Gestion des Clients</h3>
+
+<button class="btn btn-primary mb-3" @onclick="ShowCreateForm">Créer Client</button>
+
+@if (ShowForm)
+{
+    <EditForm Model="EditingClient" OnValidSubmit="SaveClient">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="row g-2 mb-2">
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.NomSociete" placeholder="Nom société" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.Adresse" placeholder="Adresse" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.CodePostal" placeholder="Code Postal" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.Ville" placeholder="Ville" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.Pays" placeholder="Pays" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.EmailAdministrateur" placeholder="Email Administrateur" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.Mobile" placeholder="Mobile" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="EditingClient.MotDePasseAdministrateur" placeholder="Mot de passe" type="password" />
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-success" type="submit">Enregistrer</button>
+                <button class="btn btn-secondary ms-2" type="button" @onclick="CancelEdit">Annuler</button>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@if (Clients is null)
+{
+    <p>Chargement...</p>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Nom société</th>
+                <th>Adresse</th>
+                <th>Code Postal</th>
+                <th>Ville</th>
+                <th>Pays</th>
+                <th>Email Administrateur</th>
+                <th>Mobile</th>
+                <th style="width:120px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Clients)
+            {
+                <tr>
+                    <td>@client.NomSociete</td>
+                    <td>@client.Adresse</td>
+                    <td>@client.CodePostal</td>
+                    <td>@client.Ville</td>
+                    <td>@client.Pays</td>
+                    <td>@client.EmailAdministrateur</td>
+                    <td>@client.Mobile</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" @onclick="() => EditClient(client)">Modifier</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteClient(client.Id)">Supprimer</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    // Voir Customers.razor.cs
+}

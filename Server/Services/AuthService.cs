@@ -57,5 +57,12 @@ namespace Server.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public (string token, DateTime expiresAt) GenerateJwtTokenWithExpiration(Utilisateur user)
+        {
+            var expires = DateTime.UtcNow.AddHours(2); // ou la durée configurée
+            var token = GenerateJwtToken(user); // Utilise la méthode existante
+            return (token, expires);
+        }
     }
 }
