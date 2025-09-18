@@ -172,6 +172,7 @@ namespace Test.CLI
                 var salleDto = new SalleDeFormationDto
                 {
                     ClientId = client.Id,
+                    // Client = ... // NE PAS RENSEIGNER pour l'insert
                     Nom = "Salle Test CLI",
                     FormateurId = formateur.Id,
                     DateDebut = DateTime.UtcNow,

@@ -140,22 +140,37 @@ namespace Server.Services
             };
         }
 
-        public async Task AddAsync(SalleDeFormationDto dto)
+        public async Task<SalleDeFormationDto> AddAsync(SalleDeFormationDto dto)
         {
-            Utilisateur formateur = null;
-            if (dto.Formateur != null)
-            {
-                formateur = await _db.Utilisateurs.FindAsync(dto.Formateur.Id);
-            }
-            var s = new SalleDeFormation
+            var salle = new SalleDeFormation
             {
                 Nom = dto.Nom,
-                Formateur = formateur,
+                ClientId = dto.ClientId, // Utiliser uniquement l'ID
+                FormateurId = dto.FormateurId,
                 DateDebut = dto.DateDebut,
-                DateFin = dto.DateFin
+                DateFin = dto.DateFin,
+                // Machines et Stagiaires à gérer selon la logique métier
             };
-            _db.SallesDeFormation.Add(s);
+
+            // Ajout des stagiaires si besoin
+            if (dto.Stagiaires != null && dto.Stagiaires.Any())
+            {
+                var stagiaires = _db.Utilisateurs.Where(u => dto.Stagiaires.Select(s => s.Id).Contains(u.Id)).ToList();
+                salle.Stagiaires = stagiaires;
+            }
+
+            // Ajout des machines si besoin
+            if (dto.Machines != null && dto.Machines.Any())
+            {
+                var machineIds = dto.Machines.Select(m => m.Id).ToList();
+                var machines = _db.MachinesVirtuelles.Where(m => machineIds.Contains(m.Id)).ToList();
+                salle.Machines = machines;
+            }
+
+            _db.SallesDeFormation.Add(salle);
             await _db.SaveChangesAsync();
+
+            return ToDto(salle);
         }
 
         public async Task UpdateAsync(int id, SalleDeFormationDto dto)

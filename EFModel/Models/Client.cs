@@ -12,6 +12,7 @@ using System.Collections.Generic;
         public string Mobile { get; set; }
         public string MotDePasseAdministrateur { get; set; }
 
-        public ICollection<Utilisateur> Utilisateurs { get; set; }
         public ICollection<SalleDeFormation> SallesDeFormation { get; set; } = new List<SalleDeFormation>();
+        public ICollection<Utilisateur> Utilisateurs { get; set; } = new List<Utilisateur>();
+        // ...autres propriétés/navigation...
     }
