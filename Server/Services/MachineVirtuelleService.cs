@@ -20,7 +20,6 @@ namespace Server.Services
                 {
                     Id = vm.Id,
                     Name = vm.Name,
-                    Nom = vm.NomMarketingVM,
                     TypeOS = vm.TypeOS,
                     TypeVM = vm.TypeVM,
                     Sku = vm.Sku,
@@ -40,7 +39,6 @@ namespace Server.Services
             {
                 Id = vm.Id,
                 Name = vm.Name,
-                Nom = vm.NomMarketingVM,
                 TypeOS = vm.TypeOS,
                 TypeVM = vm.TypeVM,
                 Sku = vm.Sku,
@@ -56,7 +54,6 @@ namespace Server.Services
             var vm = new MachineVirtuelle
             {
                 Name = dto.Name,
-                NomMarketingVM = dto.Nom,
                 TypeOS = dto.TypeOS,
                 TypeVM = dto.TypeVM,
                 Sku = dto.Sku,
@@ -74,7 +71,6 @@ namespace Server.Services
             var vm = await _db.MachinesVirtuelles.FindAsync(id);
             if (vm == null) return;
             vm.Name = dto.Name;
-            vm.NomMarketingVM = dto.Nom;
             vm.TypeOS = dto.TypeOS;
             vm.TypeVM = dto.TypeVM;
             vm.Sku = dto.Sku;

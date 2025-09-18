@@ -12,9 +12,19 @@ public class SallesDeFormationBase : ComponentBase
     protected bool isLoading = true;
     protected bool isEdit = false;
 
+    // List of formateurs for the combobox
+    protected List<UtilisateurDto> formateurs = new();
+
     protected override async Task OnInitializedAsync()
     {
+        await LoadFormateurs();
         await LoadSalles();
+    }
+
+    protected async Task LoadFormateurs()
+    {
+        var allUsers = await Http.GetFromJsonAsync<List<UtilisateurDto>>("/users");
+        formateurs = allUsers?.Where(u => u.Role == "Formateur").ToList() ?? new List<UtilisateurDto>();
     }
 
     protected async Task LoadSalles()
@@ -47,6 +57,24 @@ public class SallesDeFormationBase : ComponentBase
 
     protected async Task SaveSalle()
     {
+        // Assign the selected formateur object from the list
+        if (editSalle.Formateur != null && editSalle.Formateur.Id != 0)
+        {
+            var selected = formateurs.FirstOrDefault(f => f.Id == editSalle.Formateur.Id);
+            if (selected != null)
+            {
+                editSalle.Formateur = new UtilisateurDto
+                {
+                    Id = selected.Id,
+                    Email = selected.Email,
+                    Nom = selected.Nom,
+                    Prenom = selected.Prenom,
+                    MotDePasse = selected.MotDePasse,
+                    Role = selected.Role,
+                    ClientId = selected.ClientId
+                };
+            }
+        }
         if (isEdit)
         {
             await Http.PutAsJsonAsync($"/salles/{editSalle.Id}", editSalle);

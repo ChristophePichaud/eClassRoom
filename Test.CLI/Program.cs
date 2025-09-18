@@ -6,6 +6,8 @@ using EFModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Server.Services;
+using Shared.Dtos;
+using System.Linq;
 
 namespace Test.CLI
 {
@@ -99,22 +101,42 @@ namespace Test.CLI
                 db.Utilisateurs.Add(stagiaire);
                 db.SaveChanges();
 
-                // Create a virtual room
-                var salle = new SalleDeFormation
+                // Create a virtual room DTO
+                var salleDto = new SalleDeFormationDto
                 {
-                    NomFormation = "Formation PostgreSQL",
-                    FormateurId = formateur.Id,
-                    Formateur = formateur,
-                    Stagiaires = new List<Utilisateur> { stagiaire },
+                    Nom = "Formation PostgreSQL",
+                    Formateur = new UtilisateurDto
+                    {
+                        Id = formateur.Id,
+                        Email = formateur.Email,
+                        Nom = formateur.Nom,
+                        Prenom = formateur.Prenom,
+                        MotDePasse = formateur.MotDePasse,
+                        Role = formateur.Role.ToString(),
+                        ClientId = formateur.ClientId
+                    },
                     DateDebut = DateTime.Now,
                     DateFin = DateTime.Now.AddDays(3),
-                    ClientId = client.Id,
-                    Client = client
+                    Stagiaires = new List<UtilisateurDto>
+                    {
+                        new UtilisateurDto
+                        {
+                            Id = stagiaire.Id,
+                            Email = stagiaire.Email,
+                            Nom = stagiaire.Nom,
+                            Prenom = stagiaire.Prenom,
+                            MotDePasse = stagiaire.MotDePasse,
+                            Role = stagiaire.Role.ToString(),
+                            ClientId = stagiaire.ClientId
+                        }
+                    }
                 };
-                db.SallesDeFormation.Add(salle);
-                db.SaveChanges();
 
-                Console.WriteLine($"Sample virtual room created. SalleId={salle.Id}");
+                // Use the service to add the room
+                var salleService = new SalleDeFormationService(db);
+                salleService.AddAsync(salleDto).Wait();
+
+                Console.WriteLine($"Sample virtual room created. Nom={salleDto.Nom}");
             }
         }
     }

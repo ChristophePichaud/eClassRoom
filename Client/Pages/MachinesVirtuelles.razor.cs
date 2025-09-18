@@ -37,7 +37,6 @@ public class MachinesVirtuellesBase : ComponentBase
         {
             Id = vm.Id,
             Name = vm.Name,
-            Nom = vm.Nom,
             TypeOS = vm.TypeOS,
             TypeVM = vm.TypeVM,
             Sku = vm.Sku,

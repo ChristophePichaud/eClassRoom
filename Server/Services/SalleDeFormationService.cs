@@ -17,14 +17,24 @@ namespace Server.Services
         {
             return await _db.SallesDeFormation
                 .Include(s => s.Stagiaires)
+                .Include(s => s.Formateur)
                 .Select(s => new SalleDeFormationDto
                 {
                     Id = s.Id,
                     Nom = s.Nom,
-                    Formateur = s.Formateur,
+                    Formateur = s.Formateur == null ? null : new UtilisateurDto
+                    {
+                        Id = s.Formateur.Id,
+                        Email = s.Formateur.Email,
+                        Nom = s.Formateur.Nom,
+                        Prenom = s.Formateur.Prenom,
+                        MotDePasse = s.Formateur.MotDePasse,
+                        Role = s.Formateur.Role.ToString(),
+                        ClientId = s.Formateur.ClientId
+                    },
                     DateDebut = s.DateDebut,
                     DateFin = s.DateFin,
-                    Utilisateurs = s.Stagiaires.Select(u => new UtilisateurDto
+                    Stagiaires = s.Stagiaires.Select(u => new UtilisateurDto
                     {
                         Id = u.Id,
                         Email = u.Email,
@@ -42,16 +52,26 @@ namespace Server.Services
         {
             var s = await _db.SallesDeFormation
                 .Include(sf => sf.Stagiaires)
+                .Include(sf => sf.Formateur)
                 .FirstOrDefaultAsync(sf => sf.Id == id);
             if (s == null) return null;
             return new SalleDeFormationDto
             {
                 Id = s.Id,
                 Nom = s.Nom,
-                Formateur = s.Formateur,
+                Formateur = s.Formateur == null ? null : new UtilisateurDto
+                {
+                    Id = s.Formateur.Id,
+                    Email = s.Formateur.Email,
+                    Nom = s.Formateur.Nom,
+                    Prenom = s.Formateur.Prenom,
+                    MotDePasse = s.Formateur.MotDePasse,
+                    Role = s.Formateur.Role.ToString(),
+                    ClientId = s.Formateur.ClientId
+                },
                 DateDebut = s.DateDebut,
                 DateFin = s.DateFin,
-                Utilisateurs = s.Stagiaires.Select(u => new UtilisateurDto
+                Stagiaires = s.Stagiaires.Select(u => new UtilisateurDto
                 {
                     Id = u.Id,
                     Email = u.Email,
@@ -66,10 +86,15 @@ namespace Server.Services
 
         public async Task AddAsync(SalleDeFormationDto dto)
         {
+            Utilisateur formateur = null;
+            if (dto.Formateur != null)
+            {
+                formateur = await _db.Utilisateurs.FindAsync(dto.Formateur.Id);
+            }
             var s = new SalleDeFormation
             {
                 Nom = dto.Nom,
-                Formateur = dto.Formateur,
+                Formateur = formateur,
                 DateDebut = dto.DateDebut,
                 DateFin = dto.DateFin
             };
@@ -82,7 +107,11 @@ namespace Server.Services
             var s = await _db.SallesDeFormation.FindAsync(id);
             if (s == null) return;
             s.Nom = dto.Nom;
-            s.Formateur = dto.Formateur;
+            if (dto.Formateur != null)
+            {
+                var formateur = await _db.Utilisateurs.FindAsync(dto.Formateur.Id);
+                s.Formateur = formateur;
+            }
             s.DateDebut = dto.DateDebut;
             s.DateFin = dto.DateFin;
             await _db.SaveChangesAsync();

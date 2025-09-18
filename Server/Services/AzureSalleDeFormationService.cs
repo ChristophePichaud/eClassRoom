@@ -80,7 +80,7 @@ namespace Server.Services
                     StagiaireId = stagiaire.Id,
                     StagiaireNom = stagiaire.Nom,
                     VmName = vmName,
-                    PublicIp = publicIp.Data.IpAddress
+                    PublicIp = publicIp.Data.IPAddress // Updated for latest Azure SDK
                 });
 
                 // Stockage en base
@@ -89,7 +89,7 @@ namespace Server.Services
                     SalleDeFormationId = salle.Id,
                     StagiaireId = stagiaire.Id,
                     VmName = vmName,
-                    PublicIp = publicIp.Data.IpAddress,
+                    PublicIp = publicIp.Data.IPAddress, // Updated for latest Azure SDK
                     DateProvisionning = DateTime.UtcNow
                 };
                 _db.ProvisionningVMs.Add(provision);

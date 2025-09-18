@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class SalleDeFormation
 {
     public int Id { get; set; }
-    public string NomFormation { get; set; }
+    public string Nom { get; set; }
     public int FormateurId { get; set; }
     public Utilisateur Formateur { get; set; }
     public ICollection<Utilisateur> Stagiaires { get; set; }
