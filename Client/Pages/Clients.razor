@@ -1,9 +1,47 @@
 @page "/clients"
-@inject HttpClient Http
 
 <PageTitle>Clients</PageTitle>
 
 <h3>Liste des clients</h3>
+
+<button class="btn btn-primary mb-3" @onclick="ToggleForm">@(showForm ? "Annuler" : "Nouveau Client")</button>
+
+@if (showForm)
+{
+    <EditForm Model="newClient" OnValidSubmit="CreateClientAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="row mb-2">
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.NomSociete" placeholder="Nom de la société" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.Adresse" placeholder="Adresse" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.CodePostal" placeholder="Code Postal" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.Ville" placeholder="Ville" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.Pays" placeholder="Pays" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.EmailAdministrateur" placeholder="Email Administrateur" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.Mobile" placeholder="Mobile" />
+            </div>
+            <div class="col">
+                <InputText class="form-control" @bind-Value="newClient.MotDePasseAdministrateur" placeholder="Mot de passe administrateur" type="password" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Créer</button>
+    </EditForm>
+}
 
 @if (clients == null)
 {
@@ -23,13 +61,4 @@ else
             <TableColumn Field="Mobile" Title="Mobile" />
         </TableColumns>
     </BootstrapBlazor.Table>
-}
-
-@code {
-    private List<Shared.Dtos.ClientDto> clients;
-
-    protected override async Task OnInitializedAsync()
-    {
-        clients = await Http.GetFromJsonAsync<List<Shared.Dtos.ClientDto>>("api/clients");
-    }
 }

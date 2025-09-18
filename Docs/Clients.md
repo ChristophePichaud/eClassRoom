@@ -1,48 +1,48 @@
-# Documentation de la page Clients.razor
+# Documentation technique : Gestion des clients
 
-## Rôle de la page
+## Vue d'ensemble
 
-La page `Clients.razor` permet d’afficher, de créer, de modifier et de supprimer des clients dans l’application. Elle constitue l’interface utilisateur pour la gestion des entités `Client`.
+La gestion des clients repose sur l’architecture multi-couches :
+- **Client** (Blazor WebAssembly) : Affichage, création et gestion des clients via une page Razor et un fichier code-behind.
+- **Server** : Expose des endpoints REST sécurisés pour la gestion des clients, en s’appuyant sur la couche service.
+- **Shared** : Utilisation de DTO (`ClientDto`) pour échanger les données de façon sécurisée.
+- **EFModel** : Entité `Client` mappée sur la base PostgreSQL.
 
-## Dépendances principales
+## Fonctionnalités côté client
 
-- **HttpClient** : Utilisé pour effectuer les appels HTTP (GET, POST, PUT, DELETE) vers l’API REST du serveur pour récupérer et manipuler les données des clients.
-- **DTO ClientDto** (projet Shared) : Sert à transporter les données des clients entre le client Blazor et le serveur, sans exposer directement les entités EF.
-- **BootstrapBlazor** : Fournit les composants UI pour l’affichage des listes, formulaires et dialogues de confirmation.
-- **IJSRuntime** : Peut être utilisé pour des interactions avancées côté client (notifications, confirmations, etc.).
+- La page `Clients.razor` affiche la liste des clients dans un tableau BootstrapBlazor.
+- Un bouton "Nouveau Client" ouvre un formulaire modal pour la création d’un client.
+- Toute la logique métier (chargement, création, gestion du modal) est déportée dans le fichier code-behind `Clients.razor.cs`.
+- Les appels HTTP sont réalisés via `HttpClient` et consomment l’API REST du serveur.
+- Après création d’un client, la liste est automatiquement rafraîchie.
 
-## Fonctionnement et interactions
+## Fonctionnalités côté serveur
 
-1. **Chargement des clients**
-   - Au chargement de la page, le code-behind appelle l’API (`GET /api/clients`) via `HttpClient` pour récupérer la liste des clients.
-   - Les données reçues (liste de `ClientDto`) sont affichées dans un composant BootstrapBlazor (tableau, liste, etc.).
+- Le contrôleur REST reçoit les requêtes, les valide et délègue à la couche service (`ClientService`).
+- Le service effectue la conversion entité <-> DTO et gère la persistance via Entity Framework.
+- Les mots de passe administrateurs sont traités de façon sécurisée (jamais exposés côté client).
 
-2. **Ajout d’un client**
-   - L’utilisateur saisit les informations d’un nouveau client dans un formulaire.
-   - Le code-behind envoie une requête `POST` à l’API (`POST /api/clients`) avec le DTO du client à créer.
-   - Le serveur ajoute le client via la couche de services, qui utilise Entity Framework pour insérer l’entité dans la base PostgreSQL.
+## Sécurité
 
-3. **Modification d’un client**
-   - L’utilisateur édite un client existant via un formulaire ou un dialogue.
-   - Le code-behind envoie une requête `PUT` à l’API (`PUT /api/clients/{id}`) avec le DTO mis à jour.
-   - Le serveur met à jour l’entité correspondante via la couche de services et EF.
+- Les endpoints sont sécurisés par authentification JWT.
+- Les DTO permettent de maîtriser les données exposées au client.
 
-4. **Suppression d’un client**
-   - L’utilisateur confirme la suppression d’un client.
-   - Le code-behind envoie une requête `DELETE` à l’API (`DELETE /api/clients/{id}`).
-   - Le serveur supprime l’entité via la couche de services et EF.
+## Références de code
 
-5. **Sécurité**
-   - Les appels à l’API sont protégés par JWT : le token est automatiquement ajouté dans l’en-tête `Authorization` par le handler HTTP.
-   - Le contrôleur côté serveur est décoré avec `[Authorize]` pour restreindre l’accès aux utilisateurs authentifiés.
+- `Client/Pages/Clients.razor` : UI et modal de création.
+- `Client/Pages/Clients.razor.cs` : Code-behind, logique métier et appels API.
+- `Shared/Dtos/ClientDto.cs` : Définition du DTO.
+- `Server/Services/ClientService.cs` : Service métier côté serveur.
 
-## Interactions avec les services et Entity Framework
+## Exemple d’usage
 
-- **Côté client** :  
-  - `Clients.razor` et son code-behind n’accèdent jamais directement à la base de données ni à EF.
-  - Toutes les opérations passent par l’API REST, en utilisant des DTO.
+1. L’utilisateur clique sur "Nouveau Client", saisit les informations et valide.
+2. Le client Blazor envoie la requête POST à l’API.
+3. Le serveur crée le client, retourne le DTO.
+4. Le client recharge la liste et affiche le nouveau client.
 
-- **Côté serveur** :  
+---
+Cette documentation est générée automatiquement à chaque évolution du code lié à la gestion des clients.
   - Le contrôleur `ClientsController` reçoit les requêtes du client, valide les données, puis délègue la logique à la couche de services (`ClientService`).
   - La couche de services utilise Entity Framework (`EFModel`) pour interagir avec la base PostgreSQL (lecture, création, modification, suppression d’entités `Client`).
   - Les entités EF ne sont jamais exposées directement au client : seules les données des DTO transitent.

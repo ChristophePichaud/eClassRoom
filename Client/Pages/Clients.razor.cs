@@ -1,75 +1,46 @@
 using Microsoft.AspNetCore.Components;
-using Shared.Dtos;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Shared.Dtos;
 
-public class ClientsBase : ComponentBase
+namespace Client.Pages
 {
-    [Inject] protected HttpClient Http { get; set; }
-
-    protected List<ClientDto> clients = new();
-    protected ClientDto editClient = new();
-    protected bool showForm = false;
-    protected bool isLoading = true;
-    protected bool isEdit = false;
-
-    protected override async Task OnInitializedAsync()
+    public partial class Clients
     {
-        await LoadClients();
-    }
+        [Inject] private HttpClient Http { get; set; }
 
-    protected async Task LoadClients()
-    {
-        isLoading = true;
-        clients = await Http.GetFromJsonAsync<List<ClientDto>>("/users");
-        isLoading = false;
-    }
+        private List<ClientDto> clients;
+        private bool showForm = false;
+        private ClientDto newClient = new();
 
-    protected void ShowAddClient()
-    {
-        editClient = new ClientDto();
-        showForm = true;
-        isEdit = false;
-    }
-
-    protected void EditClient(ClientDto client)
-    {
-        editClient = new ClientDto
+        protected override async Task OnInitializedAsync()
         {
-            Id = client.Id,
-            NomSociete = client.NomSociete,
-            Adresse = client.Adresse,
-            EmailAdministrateur = client.EmailAdministrateur,
-            MotDePasseAdministrateur = client.MotDePasseAdministrateur
-        };
-        showForm = true;
-        isEdit = true;
-    }
-
-    protected async Task SaveClient()
-    {
-        if (isEdit)
-        {
-            await Http.PutAsJsonAsync($"/users/{editClient.Id}", editClient);
+            await LoadClientsAsync();
         }
-        else
+
+        private async Task LoadClientsAsync()
         {
-            await Http.PostAsJsonAsync("/users", editClient);
+            clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/clients");
         }
-        showForm = false;
-        await LoadClients();
-    }
 
-    protected async Task DeleteClient(int id)
-    {
-        await Http.DeleteAsync($"/users/{id}");
-        await LoadClients();
-    }
+        private void ToggleForm()
+        {
+            showForm = !showForm;
+            if (showForm)
+                newClient = new ClientDto();
+        }
 
-    protected void CancelEdit()
-    {
-        showForm = false;
+        private async Task CreateClientAsync()
+        {
+            var response = await Http.PostAsJsonAsync("api/clients", newClient);
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadClientsAsync();
+                showForm = false;
+            }
+            // Gérer les erreurs si besoin
+        }
     }
 }
-
-// La méthode ShowAddClient() initialise editClient et affiche le formulaire de création.
-// La méthode SaveClient() gère la création ou la modification selon la valeur de isEdit.
