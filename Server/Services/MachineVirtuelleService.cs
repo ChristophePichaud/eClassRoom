@@ -19,14 +19,15 @@ namespace Server.Services
                 .Select(vm => new MachineVirtuelleDto
                 {
                     Id = vm.Id,
-                    Nom = vm.Nom,
-                    TypeOs = vm.TypeOs,
-                    TypeVm = vm.TypeVm,
+                    Name = vm.Name,
+                    Nom = vm.NomMarketingVM,
+                    TypeOS = vm.TypeOS,
+                    TypeVM = vm.TypeVM,
                     Sku = vm.Sku,
                     Offer = vm.Offer,
                     Version = vm.Version,
-                    DiskIso = vm.DiskIso,
-                    NomMarketing = vm.NomMarketing
+                    DiskISO = vm.DiskISO,
+                    NomMarketing = vm.NomMarketingVM
                 })
                 .ToListAsync();
         }
@@ -38,14 +39,15 @@ namespace Server.Services
             return new MachineVirtuelleDto
             {
                 Id = vm.Id,
-                Nom = vm.Nom,
-                TypeOs = vm.TypeOs,
-                TypeVm = vm.TypeVm,
+                Name = vm.Name,
+                Nom = vm.NomMarketingVM,
+                TypeOS = vm.TypeOS,
+                TypeVM = vm.TypeVM,
                 Sku = vm.Sku,
                 Offer = vm.Offer,
                 Version = vm.Version,
-                DiskIso = vm.DiskIso,
-                NomMarketing = vm.NomMarketing
+                DiskISO = vm.DiskISO,
+                NomMarketing = vm.NomMarketingVM
             };
         }
 
@@ -53,14 +55,15 @@ namespace Server.Services
         {
             var vm = new MachineVirtuelle
             {
-                Nom = dto.Nom,
-                TypeOs = dto.TypeOs,
-                TypeVm = dto.TypeVm,
+                Name = dto.Name,
+                NomMarketingVM = dto.Nom,
+                TypeOS = dto.TypeOS,
+                TypeVM = dto.TypeVM,
                 Sku = dto.Sku,
                 Offer = dto.Offer,
                 Version = dto.Version,
-                DiskIso = dto.DiskIso,
-                NomMarketing = dto.NomMarketing
+                DiskISO = dto.DiskISO,
+                NomMarketingVM = dto.NomMarketing
             };
             _db.MachinesVirtuelles.Add(vm);
             await _db.SaveChangesAsync();
@@ -70,14 +73,15 @@ namespace Server.Services
         {
             var vm = await _db.MachinesVirtuelles.FindAsync(id);
             if (vm == null) return;
-            vm.Nom = dto.Nom;
-            vm.TypeOs = dto.TypeOs;
-            vm.TypeVm = dto.TypeVm;
+            vm.Name = dto.Name;
+            vm.NomMarketingVM = dto.Nom;
+            vm.TypeOS = dto.TypeOS;
+            vm.TypeVM = dto.TypeVM;
             vm.Sku = dto.Sku;
             vm.Offer = dto.Offer;
             vm.Version = dto.Version;
-            vm.DiskIso = dto.DiskIso;
-            vm.NomMarketing = dto.NomMarketing;
+            vm.DiskISO = dto.DiskISO;
+            vm.NomMarketingVM = dto.NomMarketing;
             await _db.SaveChangesAsync();
         }
 

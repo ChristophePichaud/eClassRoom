@@ -4,6 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Server.Services
 {
+    public static class RoleUtilisateurHelper
+    {
+        public static RoleUtilisateur FromStringToRoleUtilisateur(string value)
+        {
+            return Enum.TryParse<RoleUtilisateur>(value, out var result) ? result : RoleUtilisateur.Stagiaire;
+        }
+
+        public static string ToStringRole(RoleUtilisateur role)
+        {
+            return role.ToString();
+        }
+    }
+
     public class UtilisateurService
     {
         private readonly EClassRoomDbContext _db;
@@ -23,7 +36,7 @@ namespace Server.Services
                     Nom = u.Nom,
                     Prenom = u.Prenom,
                     MotDePasse = u.MotDePasse,
-                    Role = u.Role,
+                    Role = RoleUtilisateurHelper.ToStringRole(u.Role),
                     ClientId = u.ClientId
                 })
                 .ToListAsync();
@@ -40,7 +53,7 @@ namespace Server.Services
                 Nom = u.Nom,
                 Prenom = u.Prenom,
                 MotDePasse = u.MotDePasse,
-                Role = u.Role,
+                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
                 ClientId = u.ClientId
             };
         }
@@ -53,7 +66,7 @@ namespace Server.Services
                 Nom = dto.Nom,
                 Prenom = dto.Prenom,
                 MotDePasse = dto.MotDePasse,
-                Role = dto.Role,
+                Role = RoleUtilisateurHelper.FromStringToRoleUtilisateur(dto.Role),
                 ClientId = dto.ClientId
             };
             _db.Utilisateurs.Add(u);
@@ -68,7 +81,7 @@ namespace Server.Services
             u.Nom = dto.Nom;
             u.Prenom = dto.Prenom;
             u.MotDePasse = dto.MotDePasse;
-            u.Role = dto.Role;
+            u.Role = RoleUtilisateurHelper.FromStringToRoleUtilisateur(dto.Role);
             u.ClientId = dto.ClientId;
             await _db.SaveChangesAsync();
         }

@@ -14,7 +14,7 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Nom</th>
+                <th>Name</th>
                 <th>Type OS</th>
                 <th>Type VM</th>
                 <th>SKU</th>
@@ -29,13 +29,13 @@ else
             @foreach (var vm in machines)
             {
                 <tr>
-                    <td>@vm.Nom</td>
-                    <td>@vm.TypeOs</td>
-                    <td>@vm.TypeVm</td>
+                    <td>@vm.Name</td>
+                    <td>@vm.TypeOS</td>
+                    <td>@vm.TypeVM</td>
                     <td>@vm.Sku</td>
                     <td>@vm.Offer</td>
                     <td>@vm.Version</td>
-                    <td>@vm.DiskIso</td>
+                    <td>@vm.DiskISO</td>
                     <td>@vm.NomMarketing</td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1" @onclick="() => EditVm(vm)">Modifier</button>
@@ -54,8 +54,8 @@ else
         <ValidationSummary />
         <h5>@(isEdit ? "Modifier la machine virtuelle" : "Créer une nouvelle machine virtuelle")</h5>
         <div class="mb-2">
-            <label>Nom</label>
-            <InputText class="form-control" @bind-Value="editVm.Nom" />
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="editVm.Name" />
         </div>
         <div class="mb-2">
             <label>Type OS</label>

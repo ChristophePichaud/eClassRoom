@@ -26,7 +26,7 @@ public class MachinesVirtuellesBase : ComponentBase
 
     protected void ShowAddVm()
     {
-        editVm = new MachineVirtuelleDto();
+    editVm = new MachineVirtuelleDto();
         showForm = true;
         isEdit = false;
     }
@@ -36,13 +36,14 @@ public class MachinesVirtuellesBase : ComponentBase
         editVm = new MachineVirtuelleDto
         {
             Id = vm.Id,
+            Name = vm.Name,
             Nom = vm.Nom,
-            TypeOs = vm.TypeOs,
-            TypeVm = vm.TypeVm,
+            TypeOS = vm.TypeOS,
+            TypeVM = vm.TypeVM,
             Sku = vm.Sku,
             Offer = vm.Offer,
             Version = vm.Version,
-            DiskIso = vm.DiskIso,
+            DiskISO = vm.DiskISO,
             NomMarketing = vm.NomMarketing
         };
         showForm = true;

@@ -8,6 +8,6 @@ namespace Shared.Dtos
         public string Prenom { get; set; }
         public string MotDePasse { get; set; }
         public string Role { get; set; }
-        public int? ClientId { get; set; } // Ajout pour lier à une société
+        public int ClientId { get; set; } // Ajout pour lier à une société
     }
 }

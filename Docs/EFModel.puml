@@ -1,0 +1,162 @@
+
+@startuml
+allow_mixing
+title Diagramme complet EFModel, Services et API
+
+' --- ENTITÉS EF ---
+class Client {
+	int Id
+	string NomSociete
+	string Adresse
+	string CodePostal
+	string Ville
+	string Pays
+	string EmailAdministrateur
+	string Mobile
+	string MotDePasseAdministrateur
+	ICollection<Utilisateur> Utilisateurs
+	ICollection<SalleDeFormation> Salles
+}
+class Utilisateur {
+	int Id
+	string Email
+	string Nom
+	string Prenom
+	string MotDePasse
+	RoleUtilisateur Role
+	int ClientId
+	Client Client
+}
+enum RoleUtilisateur {
+	Administrateur
+	Formateur
+	Stagiaire
+}
+class SalleDeFormation {
+	int Id
+	string NomFormation
+	int FormateurId
+	Utilisateur Formateur
+	ICollection<Utilisateur> Stagiaires
+	DateTime DateDebut
+	DateTime DateFin
+	int ClientId
+	Client Client
+	ICollection<MachineVirtuelle> Machines
+}
+class MachineVirtuelle {
+	int Id
+	string TypeOS
+	string TypeVM
+	string Sku
+	string Offer
+	string Version
+	string DiskISO
+	string NomMarketingVM
+	string FichierRDP
+	string Supervision
+	int StagiaireId
+	Utilisateur Stagiaire
+	int SalleDeFormationId
+	SalleDeFormation Salle
+}
+class Facture {
+	int Id
+	int ClientId
+	Client Client
+	DateTime Mois
+	decimal Montant
+	string Details
+}
+class ProvisionningVM {
+	int Id
+	int SalleDeFormationId
+	SalleDeFormation SalleDeFormation
+	int StagiaireId
+	Utilisateur Stagiaire
+	string VmName
+	string PublicIp
+	DateTime DateProvisionning
+}
+
+' --- SERVICES (CLASSES) ---
+class UtilisateurService <<service>> {
+	+Task<List<UtilisateurDto>> GetAllAsync()
+	+Task<UtilisateurDto> GetByIdAsync(int id)
+	+Task AddAsync(UtilisateurDto dto)
+	+Task UpdateAsync(int id, UtilisateurDto dto)
+	+Task DeleteAsync(int id)
+}
+class SalleDeFormationService <<service>> {
+	+Task<List<SalleDeFormationDto>> GetAllAsync()
+	+Task<SalleDeFormationDto> GetByIdAsync(int id)
+	+Task AddAsync(SalleDeFormationDto dto)
+	+Task UpdateAsync(int id, SalleDeFormationDto dto)
+	+Task DeleteAsync(int id)
+}
+class MachineVirtuelleService <<service>> {
+	+Task<List<MachineVirtuelleDto>> GetAllAsync()
+	+Task<MachineVirtuelleDto> GetByIdAsync(int id)
+	+Task AddAsync(MachineVirtuelleDto dto)
+	+Task UpdateAsync(int id, MachineVirtuelleDto dto)
+	+Task DeleteAsync(int id)
+}
+class AuthService <<service>> {
+	+Task<Utilisateur> ValidateUserAsync(string username, string password)
+	+string GenerateJwtToken(Utilisateur user)
+}
+
+' --- CONTROLLERS (COMPOSANTS) ---
+component "UsersController" as UC <<controller>>
+component "SallesController" as SC <<controller>>
+component "MachinesController" as MC <<controller>>
+component "AuthController" as AC <<controller>>
+
+note right of UC
+  +Task<ActionResult<List<UtilisateurDto>>> GetAll()
+  +Task<ActionResult<UtilisateurDto>> Get(int id)
+  +Task<IActionResult> Create(UtilisateurDto dto)
+  +Task<IActionResult> Update(int id, UtilisateurDto dto)
+  +Task<IActionResult> Delete(int id)
+end note
+note right of SC
+  +Task<ActionResult<List<SalleDeFormationDto>>> GetAll()
+  +Task<ActionResult<SalleDeFormationDto>> Get(int id)
+  +Task<IActionResult> Create(SalleDeFormationDto dto)
+  +Task<IActionResult> Update(int id, SalleDeFormationDto dto)
+  +Task<IActionResult> Delete(int id)
+end note
+note right of MC
+  +Task<ActionResult<List<MachineVirtuelleDto>>> GetAll()
+  +Task<ActionResult<MachineVirtuelleDto>> Get(int id)
+  +Task<IActionResult> Create(MachineVirtuelleDto dto)
+  +Task<IActionResult> Update(int id, MachineVirtuelleDto dto)
+  +Task<IActionResult> Delete(int id)
+end note
+note right of AC
+  +Task<IActionResult> Login(LoginDto login)
+end note
+
+' --- RELATIONS ---
+UC ..> UtilisateurService
+SC ..> SalleDeFormationService
+MC ..> MachineVirtuelleService
+AC ..> AuthService
+
+UtilisateurService ..> Utilisateur
+SalleDeFormationService ..> SalleDeFormation
+MachineVirtuelleService ..> MachineVirtuelle
+AuthService ..> Utilisateur
+
+Client "1" -- "0..*" Utilisateur : Utilisateurs
+Client "1" -- "0..*" SalleDeFormation : Salles
+Client "1" -- "0..*" Facture
+SalleDeFormation "1" -- "0..*" MachineVirtuelle : Machines
+SalleDeFormation "1" -- "0..*" Utilisateur : Stagiaires
+SalleDeFormation "1" -- "0..*" ProvisionningVM
+Utilisateur "1" -- "0..*" MachineVirtuelle : Stagiaire
+Utilisateur "1" -- "0..*" ProvisionningVM : Stagiaire
+
+skinparam componentStyle rectangle
+@enduml
+

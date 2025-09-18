@@ -16,20 +16,33 @@ namespace Server.Services
         public async Task<List<SalleDeFormationDto>> GetAllAsync()
         {
             return await _db.SallesDeFormation
+                .Include(s => s.Stagiaires)
                 .Select(s => new SalleDeFormationDto
                 {
                     Id = s.Id,
                     Nom = s.Nom,
                     Formateur = s.Formateur,
                     DateDebut = s.DateDebut,
-                    DateFin = s.DateFin
+                    DateFin = s.DateFin,
+                    Utilisateurs = s.Stagiaires.Select(u => new UtilisateurDto
+                    {
+                        Id = u.Id,
+                        Email = u.Email,
+                        Nom = u.Nom,
+                        Prenom = u.Prenom,
+                        MotDePasse = u.MotDePasse,
+                        Role = u.Role.ToString(),
+                        ClientId = u.ClientId
+                    }).ToList()
                 })
                 .ToListAsync();
         }
 
         public async Task<SalleDeFormationDto> GetByIdAsync(int id)
         {
-            var s = await _db.SallesDeFormation.FindAsync(id);
+            var s = await _db.SallesDeFormation
+                .Include(sf => sf.Stagiaires)
+                .FirstOrDefaultAsync(sf => sf.Id == id);
             if (s == null) return null;
             return new SalleDeFormationDto
             {
@@ -37,7 +50,17 @@ namespace Server.Services
                 Nom = s.Nom,
                 Formateur = s.Formateur,
                 DateDebut = s.DateDebut,
-                DateFin = s.DateFin
+                DateFin = s.DateFin,
+                Utilisateurs = s.Stagiaires.Select(u => new UtilisateurDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Nom = u.Nom,
+                    Prenom = u.Prenom,
+                    MotDePasse = u.MotDePasse,
+                    Role = u.Role.ToString(),
+                    ClientId = u.ClientId
+                }).ToList()
             };
         }
 
