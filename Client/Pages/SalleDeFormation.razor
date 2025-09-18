@@ -1,0 +1,34 @@
+@page "/salles"
+@inject HttpClient Http
+
+<PageTitle>Salles de formation</PageTitle>
+
+<h3>Liste des salles de formation</h3>
+
+@if (salles == null)
+{
+    <p><em>Chargement...</em></p>
+}
+else
+{
+    <BootstrapBlazor.Table TItem="Shared.Dtos.SalleDeFormationDto" Items="salles">
+        <TableColumns>
+            <TableColumn Field="Id" Title="ID" />
+            <TableColumn Field="Nom" Title="Nom" />
+            <TableColumn Field="ClientId" Title="Client ID" />
+            <TableColumn Field="Formateur.Nom" Title="Formateur" />
+            <TableColumn Field="DateDebut" Title="Début" />
+            <TableColumn Field="DateFin" Title="Fin" />
+            <TableColumn Field="Stagiaires.Count" Title="Nb Stagiaires" />
+        </TableColumns>
+    </BootstrapBlazor.Table>
+}
+
+@code {
+    private List<Shared.Dtos.SalleDeFormationDto> salles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        salles = await Http.GetFromJsonAsync<List<Shared.Dtos.SalleDeFormationDto>>("api/salles");
+    }
+}

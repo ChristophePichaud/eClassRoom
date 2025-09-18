@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Shared.Dtos;
 using System.Net.Http.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class SallesDeFormationBase : ComponentBase
 {
@@ -15,10 +18,19 @@ public class SallesDeFormationBase : ComponentBase
     // List of formateurs for the combobox
     protected List<UtilisateurDto> formateurs = new();
 
+    // List of clients for the combobox
+    protected List<ClientDto> clients = new();
+
     protected override async Task OnInitializedAsync()
     {
         await LoadFormateurs();
+        await LoadClients();
         await LoadSalles();
+    }
+
+    protected async Task LoadClients()
+    {
+        clients = await Http.GetFromJsonAsync<List<ClientDto>>("Client");
     }
 
     protected async Task LoadFormateurs()
@@ -49,7 +61,8 @@ public class SallesDeFormationBase : ComponentBase
             Nom = salle.Nom,
             Formateur = salle.Formateur,
             DateDebut = salle.DateDebut,
-            DateFin = salle.DateFin
+            DateFin = salle.DateFin,
+            ClientId = salle.ClientId
         };
         showForm = true;
         isEdit = true;

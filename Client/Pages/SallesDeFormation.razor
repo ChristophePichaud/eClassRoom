@@ -50,14 +50,26 @@ else
             <InputText class="form-control" @bind-Value="editSalle.Nom" />
         </div>
         <div class="mb-2">
+            <label>Client</label>
+            <InputSelect class="form-control" @bind-Value="editSalle.ClientId">
+                <option value="">-- Sélectionner un client --</option>
+                @foreach (var client in clients)
+                {
+                    <option value="@client.Id">@client.NomSociete</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => editSalle.ClientId)" />
+        </div>
+        <div class="mb-2">
             <label>Formateur</label>
             <InputSelect class="form-control" @bind-Value="editSalle.Formateur.Id">
                 <option value="">-- Sélectionner un formateur --</option>
                 @foreach (var formateur in formateurs)
                 {
-                    <option value="@formateur.Id">@formateur.Nom @formateur.Prenom (@formateur.Email)</option>
+                    <option value="@formateur.Id">@formateur.Prenom @formateur.Nom</option>
                 }
             </InputSelect>
+            <ValidationMessage For="@(() => editSalle.Formateur.Id)" />
         </div>
         <div class="mb-2">
             <label>Date début</label>
@@ -67,7 +79,29 @@ else
             <label>Date fin</label>
             <InputDate class="form-control" @bind-Value="editSalle.DateFin" />
         </div>
-        <button class="btn btn-success me-2" type="submit">Enregistrer</button>
+        <button class="btn btn-success me-2" type="submit"
+                disabled="@(editSalle.ClientId == 0 || editSalle.Formateur == null || editSalle.Formateur.Id == 0 || clients == null || !clients.Any() || formateurs == null || !formateurs.Any())">
+            Enregistrer
+        </button>
         <button class="btn btn-secondary" type="button" @onclick="CancelEdit">Annuler</button>
+
+        @* Error area for clients *@
+        @if (clients == null || !clients.Any())
+        {
+            <div class="mt-3">
+                <textarea class="form-control" style="color: red; border-color: red; background: #fff0f0;" readonly rows="2">
+Aucun client n'est disponible. Veuillez d'abord créer un client avant d'ajouter une salle de formation.
+                </textarea>
+            </div>
+        }
+        @* Error area for formateurs *@
+        @if (formateurs == null || !formateurs.Any())
+        {
+            <div class="mt-3">
+                <textarea class="form-control" style="color: red; border-color: red; background: #fff0f0;" readonly rows="2">
+Aucun formateur n'est disponible. Veuillez d'abord créer un formateur avant d'ajouter une salle de formation.
+                </textarea>
+            </div>
+        }
     </EditForm>
 }

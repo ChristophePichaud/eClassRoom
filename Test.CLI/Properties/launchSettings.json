@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Test.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "-b"
+    }
+  }
+}

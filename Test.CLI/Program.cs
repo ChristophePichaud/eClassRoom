@@ -104,6 +104,7 @@ namespace Test.CLI
                 // Create a virtual room DTO
                 var salleDto = new SalleDeFormationDto
                 {
+                    ClientId = client.Id,
                     Nom = "Formation PostgreSQL",
                     Formateur = new UtilisateurDto
                     {
@@ -115,8 +116,8 @@ namespace Test.CLI
                         Role = formateur.Role.ToString(),
                         ClientId = formateur.ClientId
                     },
-                    DateDebut = DateTime.Now,
-                    DateFin = DateTime.Now.AddDays(3),
+                    DateDebut = DateTime.UtcNow,
+                    DateFin = DateTime.UtcNow.AddDays(3),
                     Stagiaires = new List<UtilisateurDto>
                     {
                         new UtilisateurDto
