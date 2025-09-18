@@ -1,0 +1,611 @@
+Folder PATH listing for volume SSD1
+Volume serial number is 64F0-30A3
+E:.
+¦   .gitignore
+¦   eClassRoom.sln
+¦   files.txt
+¦   README.md
+¦   
++---.github
+¦   ¦   copilot-instructions.md
+¦   ¦   
+¦   +---workflows
++---Client
+¦   ¦   App.razor
+¦   ¦   Client.csproj
+¦   ¦   Program.cs
+¦   ¦   _Imports.razor
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   ¦           +---wwwroot
+¦   ¦               +---_framework
+¦   +---Layout
+¦   ¦       MainLayout.razor
+¦   ¦       MainLayout.razor.css
+¦   ¦       NavMenu.razor
+¦   ¦       NavMenu.razor.css
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   Client.csproj.nuget.dgspec.json
+¦   ¦   ¦   Client.csproj.nuget.g.props
+¦   ¦   ¦   Client.csproj.nuget.g.targets
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   ¦           ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+¦   ¦           ¦   Client.assets.cache
+¦   ¦           ¦   Client.csproj.FileListAbsolute.txt
+¦   ¦           ¦   Client.GlobalUsings.g.cs
+¦   ¦           ¦   rbcswa.dswa.cache.json
+¦   ¦           ¦   staticwebassets.references.upToDateCheck.txt
+¦   ¦           ¦   staticwebassets.removed.txt
+¦   ¦           ¦   
+¦   ¦           +---compressed
+¦   ¦           +---ref
+¦   ¦           +---refint
+¦   ¦           +---scopedcss
+¦   ¦           ¦   +---bundle
+¦   ¦           ¦   +---Layout
+¦   ¦           ¦   +---projectbundle
+¦   ¦           +---staticwebassets
+¦   ¦           +---tmp-webcil
+¦   ¦           ¦       Client.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Authorization.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Components.Forms.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Components.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Components.Web.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Components.WebAssembly.wasm
+¦   ¦           ¦       Microsoft.AspNetCore.Metadata.wasm
+¦   ¦           ¦       Microsoft.CSharp.wasm
+¦   ¦           ¦       Microsoft.Extensions.Configuration.Abstractions.wasm
+¦   ¦           ¦       Microsoft.Extensions.Configuration.Binder.wasm
+¦   ¦           ¦       Microsoft.Extensions.Configuration.FileExtensions.wasm
+¦   ¦           ¦       Microsoft.Extensions.Configuration.Json.wasm
+¦   ¦           ¦       Microsoft.Extensions.Configuration.wasm
+¦   ¦           ¦       Microsoft.Extensions.DependencyInjection.Abstractions.wasm
+¦   ¦           ¦       Microsoft.Extensions.DependencyInjection.wasm
+¦   ¦           ¦       Microsoft.Extensions.FileProviders.Abstractions.wasm
+¦   ¦           ¦       Microsoft.Extensions.FileProviders.Physical.wasm
+¦   ¦           ¦       Microsoft.Extensions.FileSystemGlobbing.wasm
+¦   ¦           ¦       Microsoft.Extensions.Logging.Abstractions.wasm
+¦   ¦           ¦       Microsoft.Extensions.Logging.wasm
+¦   ¦           ¦       Microsoft.Extensions.Options.wasm
+¦   ¦           ¦       Microsoft.Extensions.Primitives.wasm
+¦   ¦           ¦       Microsoft.JSInterop.wasm
+¦   ¦           ¦       Microsoft.JSInterop.WebAssembly.wasm
+¦   ¦           ¦       Microsoft.VisualBasic.Core.wasm
+¦   ¦           ¦       Microsoft.VisualBasic.wasm
+¦   ¦           ¦       Microsoft.Win32.Primitives.wasm
+¦   ¦           ¦       Microsoft.Win32.Registry.wasm
+¦   ¦           ¦       mscorlib.wasm
+¦   ¦           ¦       netstandard.wasm
+¦   ¦           ¦       Shared.wasm
+¦   ¦           ¦       System.AppContext.wasm
+¦   ¦           ¦       System.Buffers.wasm
+¦   ¦           ¦       System.Collections.Concurrent.wasm
+¦   ¦           ¦       System.Collections.Immutable.wasm
+¦   ¦           ¦       System.Collections.NonGeneric.wasm
+¦   ¦           ¦       System.Collections.Specialized.wasm
+¦   ¦           ¦       System.Collections.wasm
+¦   ¦           ¦       System.ComponentModel.Annotations.wasm
+¦   ¦           ¦       System.ComponentModel.DataAnnotations.wasm
+¦   ¦           ¦       System.ComponentModel.EventBasedAsync.wasm
+¦   ¦           ¦       System.ComponentModel.Primitives.wasm
+¦   ¦           ¦       System.ComponentModel.TypeConverter.wasm
+¦   ¦           ¦       System.ComponentModel.wasm
+¦   ¦           ¦       System.Configuration.wasm
+¦   ¦           ¦       System.Console.wasm
+¦   ¦           ¦       System.Core.wasm
+¦   ¦           ¦       System.Data.Common.wasm
+¦   ¦           ¦       System.Data.DataSetExtensions.wasm
+¦   ¦           ¦       System.Data.wasm
+¦   ¦           ¦       System.Diagnostics.Contracts.wasm
+¦   ¦           ¦       System.Diagnostics.Debug.wasm
+¦   ¦           ¦       System.Diagnostics.DiagnosticSource.wasm
+¦   ¦           ¦       System.Diagnostics.FileVersionInfo.wasm
+¦   ¦           ¦       System.Diagnostics.Process.wasm
+¦   ¦           ¦       System.Diagnostics.StackTrace.wasm
+¦   ¦           ¦       System.Diagnostics.TextWriterTraceListener.wasm
+¦   ¦           ¦       System.Diagnostics.Tools.wasm
+¦   ¦           ¦       System.Diagnostics.TraceSource.wasm
+¦   ¦           ¦       System.Diagnostics.Tracing.wasm
+¦   ¦           ¦       System.Drawing.Primitives.wasm
+¦   ¦           ¦       System.Drawing.wasm
+¦   ¦           ¦       System.Dynamic.Runtime.wasm
+¦   ¦           ¦       System.Formats.Asn1.wasm
+¦   ¦           ¦       System.Formats.Tar.wasm
+¦   ¦           ¦       System.Globalization.Calendars.wasm
+¦   ¦           ¦       System.Globalization.Extensions.wasm
+¦   ¦           ¦       System.Globalization.wasm
+¦   ¦           ¦       System.IO.Compression.Brotli.wasm
+¦   ¦           ¦       System.IO.Compression.FileSystem.wasm
+¦   ¦           ¦       System.IO.Compression.wasm
+¦   ¦           ¦       System.IO.Compression.ZipFile.wasm
+¦   ¦           ¦       System.IO.FileSystem.AccessControl.wasm
+¦   ¦           ¦       System.IO.FileSystem.DriveInfo.wasm
+¦   ¦           ¦       System.IO.FileSystem.Primitives.wasm
+¦   ¦           ¦       System.IO.FileSystem.wasm
+¦   ¦           ¦       System.IO.FileSystem.Watcher.wasm
+¦   ¦           ¦       System.IO.IsolatedStorage.wasm
+¦   ¦           ¦       System.IO.MemoryMappedFiles.wasm
+¦   ¦           ¦       System.IO.Pipelines.wasm
+¦   ¦           ¦       System.IO.Pipes.AccessControl.wasm
+¦   ¦           ¦       System.IO.Pipes.wasm
+¦   ¦           ¦       System.IO.UnmanagedMemoryStream.wasm
+¦   ¦           ¦       System.IO.wasm
+¦   ¦           ¦       System.Linq.Expressions.wasm
+¦   ¦           ¦       System.Linq.Parallel.wasm
+¦   ¦           ¦       System.Linq.Queryable.wasm
+¦   ¦           ¦       System.Linq.wasm
+¦   ¦           ¦       System.Memory.wasm
+¦   ¦           ¦       System.Net.Http.Json.wasm
+¦   ¦           ¦       System.Net.Http.wasm
+¦   ¦           ¦       System.Net.HttpListener.wasm
+¦   ¦           ¦       System.Net.Mail.wasm
+¦   ¦           ¦       System.Net.NameResolution.wasm
+¦   ¦           ¦       System.Net.NetworkInformation.wasm
+¦   ¦           ¦       System.Net.Ping.wasm
+¦   ¦           ¦       System.Net.Primitives.wasm
+¦   ¦           ¦       System.Net.Quic.wasm
+¦   ¦           ¦       System.Net.Requests.wasm
+¦   ¦           ¦       System.Net.Security.wasm
+¦   ¦           ¦       System.Net.ServicePoint.wasm
+¦   ¦           ¦       System.Net.Sockets.wasm
+¦   ¦           ¦       System.Net.wasm
+¦   ¦           ¦       System.Net.WebClient.wasm
+¦   ¦           ¦       System.Net.WebHeaderCollection.wasm
+¦   ¦           ¦       System.Net.WebProxy.wasm
+¦   ¦           ¦       System.Net.WebSockets.Client.wasm
+¦   ¦           ¦       System.Net.WebSockets.wasm
+¦   ¦           ¦       System.Numerics.Vectors.wasm
+¦   ¦           ¦       System.Numerics.wasm
+¦   ¦           ¦       System.ObjectModel.wasm
+¦   ¦           ¦       System.Private.CoreLib.wasm
+¦   ¦           ¦       System.Private.DataContractSerialization.wasm
+¦   ¦           ¦       System.Private.Uri.wasm
+¦   ¦           ¦       System.Private.Xml.Linq.wasm
+¦   ¦           ¦       System.Private.Xml.wasm
+¦   ¦           ¦       System.Reflection.DispatchProxy.wasm
+¦   ¦           ¦       System.Reflection.Emit.ILGeneration.wasm
+¦   ¦           ¦       System.Reflection.Emit.Lightweight.wasm
+¦   ¦           ¦       System.Reflection.Emit.wasm
+¦   ¦           ¦       System.Reflection.Extensions.wasm
+¦   ¦           ¦       System.Reflection.Metadata.wasm
+¦   ¦           ¦       System.Reflection.Primitives.wasm
+¦   ¦           ¦       System.Reflection.TypeExtensions.wasm
+¦   ¦           ¦       System.Reflection.wasm
+¦   ¦           ¦       System.Resources.Reader.wasm
+¦   ¦           ¦       System.Resources.ResourceManager.wasm
+¦   ¦           ¦       System.Resources.Writer.wasm
+¦   ¦           ¦       System.Runtime.CompilerServices.Unsafe.wasm
+¦   ¦           ¦       System.Runtime.CompilerServices.VisualC.wasm
+¦   ¦           ¦       System.Runtime.Extensions.wasm
+¦   ¦           ¦       System.Runtime.Handles.wasm
+¦   ¦           ¦       System.Runtime.InteropServices.JavaScript.wasm
+¦   ¦           ¦       System.Runtime.InteropServices.RuntimeInformation.wasm
+¦   ¦           ¦       System.Runtime.InteropServices.wasm
+¦   ¦           ¦       System.Runtime.Intrinsics.wasm
+¦   ¦           ¦       System.Runtime.Loader.wasm
+¦   ¦           ¦       System.Runtime.Numerics.wasm
+¦   ¦           ¦       System.Runtime.Serialization.Formatters.wasm
+¦   ¦           ¦       System.Runtime.Serialization.Json.wasm
+¦   ¦           ¦       System.Runtime.Serialization.Primitives.wasm
+¦   ¦           ¦       System.Runtime.Serialization.wasm
+¦   ¦           ¦       System.Runtime.Serialization.Xml.wasm
+¦   ¦           ¦       System.Runtime.wasm
+¦   ¦           ¦       System.Security.AccessControl.wasm
+¦   ¦           ¦       System.Security.Claims.wasm
+¦   ¦           ¦       System.Security.Cryptography.Algorithms.wasm
+¦   ¦           ¦       System.Security.Cryptography.Cng.wasm
+¦   ¦           ¦       System.Security.Cryptography.Csp.wasm
+¦   ¦           ¦       System.Security.Cryptography.Encoding.wasm
+¦   ¦           ¦       System.Security.Cryptography.OpenSsl.wasm
+¦   ¦           ¦       System.Security.Cryptography.Primitives.wasm
+¦   ¦           ¦       System.Security.Cryptography.wasm
+¦   ¦           ¦       System.Security.Cryptography.X509Certificates.wasm
+¦   ¦           ¦       System.Security.Principal.wasm
+¦   ¦           ¦       System.Security.Principal.Windows.wasm
+¦   ¦           ¦       System.Security.SecureString.wasm
+¦   ¦           ¦       System.Security.wasm
+¦   ¦           ¦       System.ServiceModel.Web.wasm
+¦   ¦           ¦       System.ServiceProcess.wasm
+¦   ¦           ¦       System.Text.Encoding.CodePages.wasm
+¦   ¦           ¦       System.Text.Encoding.Extensions.wasm
+¦   ¦           ¦       System.Text.Encoding.wasm
+¦   ¦           ¦       System.Text.Encodings.Web.wasm
+¦   ¦           ¦       System.Text.Json.wasm
+¦   ¦           ¦       System.Text.RegularExpressions.wasm
+¦   ¦           ¦       System.Threading.Channels.wasm
+¦   ¦           ¦       System.Threading.Overlapped.wasm
+¦   ¦           ¦       System.Threading.Tasks.Dataflow.wasm
+¦   ¦           ¦       System.Threading.Tasks.Extensions.wasm
+¦   ¦           ¦       System.Threading.Tasks.Parallel.wasm
+¦   ¦           ¦       System.Threading.Tasks.wasm
+¦   ¦           ¦       System.Threading.Thread.wasm
+¦   ¦           ¦       System.Threading.ThreadPool.wasm
+¦   ¦           ¦       System.Threading.Timer.wasm
+¦   ¦           ¦       System.Threading.wasm
+¦   ¦           ¦       System.Transactions.Local.wasm
+¦   ¦           ¦       System.Transactions.wasm
+¦   ¦           ¦       System.ValueTuple.wasm
+¦   ¦           ¦       System.wasm
+¦   ¦           ¦       System.Web.HttpUtility.wasm
+¦   ¦           ¦       System.Web.wasm
+¦   ¦           ¦       System.Windows.wasm
+¦   ¦           ¦       System.Xml.Linq.wasm
+¦   ¦           ¦       System.Xml.ReaderWriter.wasm
+¦   ¦           ¦       System.Xml.Serialization.wasm
+¦   ¦           ¦       System.Xml.wasm
+¦   ¦           ¦       System.Xml.XDocument.wasm
+¦   ¦           ¦       System.Xml.XmlDocument.wasm
+¦   ¦           ¦       System.Xml.XmlSerializer.wasm
+¦   ¦           ¦       System.Xml.XPath.wasm
+¦   ¦           ¦       System.Xml.XPath.XDocument.wasm
+¦   ¦           ¦       WindowsBase.wasm
+¦   ¦           ¦       
+¦   ¦           +---wasm
+¦   ¦           ¦   +---for-build
+¦   ¦           +---webcil
+¦   +---Pages
+¦   ¦       Clients.razor
+¦   ¦       Clients.razor.cs
+¦   ¦       Counter.razor
+¦   ¦       Index.razor
+¦   ¦       Login.razor
+¦   ¦       Login.razor.cs
+¦   ¦       MachinesVirtuelles.razor
+¦   ¦       MachinesVirtuelles.razor.cs
+¦   ¦       SalleDeFormation.razor
+¦   ¦       SallesDeFormation.razor
+¦   ¦       SallesDeFormation.razor.cs
+¦   ¦       Utilisateurs.razor
+¦   ¦       Utilisateurs.razor.cs
+¦   ¦       Weather.razor
+¦   ¦       
+¦   +---Properties
+¦   ¦       launchSettings.json
+¦   ¦       
+¦   +---wwwroot
+¦       ¦   favicon.png
+¦       ¦   icon-192.png
+¦       ¦   index.html
+¦       ¦   
+¦       +---css
+¦       ¦       app.css
+¦       ¦       
+¦       +---lib
+¦       ¦   +---bootstrap
+¦       ¦       +---dist
+¦       ¦           +---css
+¦       ¦           ¦       bootstrap-grid.css
+¦       ¦           ¦       bootstrap-grid.css.map
+¦       ¦           ¦       bootstrap-grid.min.css
+¦       ¦           ¦       bootstrap-grid.min.css.map
+¦       ¦           ¦       bootstrap-grid.rtl.css
+¦       ¦           ¦       bootstrap-grid.rtl.css.map
+¦       ¦           ¦       bootstrap-grid.rtl.min.css
+¦       ¦           ¦       bootstrap-grid.rtl.min.css.map
+¦       ¦           ¦       bootstrap-reboot.css
+¦       ¦           ¦       bootstrap-reboot.css.map
+¦       ¦           ¦       bootstrap-reboot.min.css
+¦       ¦           ¦       bootstrap-reboot.min.css.map
+¦       ¦           ¦       bootstrap-reboot.rtl.css
+¦       ¦           ¦       bootstrap-reboot.rtl.css.map
+¦       ¦           ¦       bootstrap-reboot.rtl.min.css
+¦       ¦           ¦       bootstrap-reboot.rtl.min.css.map
+¦       ¦           ¦       bootstrap-utilities.css
+¦       ¦           ¦       bootstrap-utilities.css.map
+¦       ¦           ¦       bootstrap-utilities.min.css
+¦       ¦           ¦       bootstrap-utilities.min.css.map
+¦       ¦           ¦       bootstrap-utilities.rtl.css
+¦       ¦           ¦       bootstrap-utilities.rtl.css.map
+¦       ¦           ¦       bootstrap-utilities.rtl.min.css
+¦       ¦           ¦       bootstrap-utilities.rtl.min.css.map
+¦       ¦           ¦       bootstrap.css
+¦       ¦           ¦       bootstrap.css.map
+¦       ¦           ¦       bootstrap.min.css
+¦       ¦           ¦       bootstrap.min.css.map
+¦       ¦           ¦       bootstrap.rtl.css
+¦       ¦           ¦       bootstrap.rtl.css.map
+¦       ¦           ¦       bootstrap.rtl.min.css
+¦       ¦           ¦       bootstrap.rtl.min.css.map
+¦       ¦           ¦       
+¦       ¦           +---js
+¦       ¦                   bootstrap.bundle.js
+¦       ¦                   bootstrap.bundle.js.map
+¦       ¦                   bootstrap.bundle.min.js
+¦       ¦                   bootstrap.bundle.min.js.map
+¦       ¦                   bootstrap.esm.js
+¦       ¦                   bootstrap.esm.js.map
+¦       ¦                   bootstrap.esm.min.js
+¦       ¦                   bootstrap.esm.min.js.map
+¦       ¦                   bootstrap.js
+¦       ¦                   bootstrap.js.map
+¦       ¦                   bootstrap.min.js
+¦       ¦                   bootstrap.min.js.map
+¦       ¦                   
+¦       +---sample-data
+¦               weather.json
+¦               
++---Docs
+¦       Arborescence-Fichiers.md
+¦       AzureInfrastructure.md
+¦       AzureSalleDeFormation_metier.md
+¦       AzureSalleDeFormation_sequence.puml
+¦       AzureSalleDeFormation_technique.md
+¦       Clients.md
+¦       ClientsService.md
+¦       dotnet-cli-creation.md
+¦       EFModel.jpg
+¦       EFModel.puml
+¦       GestionJWT.md
+¦       introduction métier.puml
+¦       Login.md
+¦       MachinesVirtuelles.md
+¦       MachinesVirtuelles_Metier.md
+¦       MyProject.md
+¦       MyProject.pdf
+¦       métier.png
+¦       Project.md
+¦       Project.pdf
+¦       Provisionner_SalleDeFormation.png
+¦       SallesDeFormation.md
+¦       SallesDeFormation_Metier.md
+¦       scenario.png
+¦       scenario.puml
+¦       Specifications.md
+¦       Utilisateurs.md
+¦       Utilisateurs_Metier.md
+¦       VSCode_Chat_CopilotForGitHub.png
+¦       
++---EFMigrator
+¦   ¦   appsettings.json
+¦   ¦   EFMigrator.csproj
+¦   ¦   Program.cs
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   ¦           +---cs
+¦   ¦           +---de
+¦   ¦           +---es
+¦   ¦           +---fr
+¦   ¦           +---it
+¦   ¦           +---ja
+¦   ¦           +---ko
+¦   ¦           +---pl
+¦   ¦           +---pt-BR
+¦   ¦           +---ru
+¦   ¦           +---tr
+¦   ¦           +---zh-Hans
+¦   ¦           +---zh-Hant
+¦   +---obj
+¦       ¦   EFMigrator.csproj.EntityFrameworkCore.targets
+¦       ¦   EFMigrator.csproj.nuget.dgspec.json
+¦       ¦   EFMigrator.csproj.nuget.g.props
+¦       ¦   EFMigrator.csproj.nuget.g.targets
+¦       ¦   project.assets.json
+¦       ¦   project.nuget.cache
+¦       ¦   
+¦       +---Debug
+¦           +---net9.0
+¦               ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+¦               ¦   apphost.exe
+¦               ¦   EFMigrator.assets.cache
+¦               ¦   EFMigrator.csproj.FileListAbsolute.txt
+¦               ¦   EFMigrator.GlobalUsings.g.cs
+¦               ¦   
+¦               +---ref
+¦               +---refint
++---EFModel
+¦   ¦   appsettings.json
+¦   ¦   Class1.cs
+¦   ¦   EClassRoomDbContext.cs
+¦   ¦   EClassRoomDbContextFactory.cs
+¦   ¦   EFModel.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   +---Migrations
+¦   ¦       20250918143152_InitialCreate.cs
+¦   ¦       20250918143152_InitialCreate.Designer.cs
+¦   ¦       20250918161858_Update1.cs
+¦   ¦       20250918161858_Update1.Designer.cs
+¦   ¦       20250918182208_Update2.cs
+¦   ¦       20250918182208_Update2.Designer.cs
+¦   ¦       20250918182812_Update3.cs
+¦   ¦       20250918182812_Update3.Designer.cs
+¦   ¦       20250918185926_Update4.cs
+¦   ¦       20250918185926_Update4.Designer.cs
+¦   ¦       20250918191931_Update5.cs
+¦   ¦       20250918191931_Update5.Designer.cs
+¦   ¦       EClassRoomDbContextModelSnapshot.cs
+¦   ¦       
+¦   +---Models
+¦   ¦       Client.cs
+¦   ¦       Facture.cs
+¦   ¦       MachineVirtuelle.cs
+¦   ¦       ProvisionningVM.cs
+¦   ¦       SalleDeFormation.cs
+¦   ¦       Utilisateur.cs
+¦   ¦       
+¦   +---obj
+¦       ¦   EFModel.csproj.EntityFrameworkCore.targets
+¦       ¦   EFModel.csproj.nuget.dgspec.json
+¦       ¦   EFModel.csproj.nuget.g.props
+¦       ¦   EFModel.csproj.nuget.g.targets
+¦       ¦   project.assets.json
+¦       ¦   project.nuget.cache
+¦       ¦   
+¦       +---Debug
+¦           +---net9.0
+¦               ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+¦               ¦   EFModel.assets.cache
+¦               ¦   EFModel.csproj.FileListAbsolute.txt
+¦               ¦   EFModel.GlobalUsings.g.cs
+¦               ¦   
+¦               +---ref
+¦               +---refint
++---Server
+¦   ¦   appsettings.Development.json
+¦   ¦   appsettings.json
+¦   ¦   Program.cs
+¦   ¦   Server.csproj
+¦   ¦   Server.csproj.user
+¦   ¦   Server.http
+¦   ¦   Startup.cs
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   ¦           ¦   Azure.Core.dll
+¦   ¦           ¦   Azure.ResourceManager.Compute.dll
+¦   ¦           ¦   Azure.ResourceManager.dll
+¦   ¦           ¦   Azure.ResourceManager.Network.dll
+¦   ¦           ¦   EFModel.dll
+¦   ¦           ¦   Microsoft.AspNetCore.OpenApi.dll
+¦   ¦           ¦   Microsoft.EntityFrameworkCore.dll
+¦   ¦           ¦   Microsoft.Extensions.Configuration.Abstractions.dll
+¦   ¦           ¦   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+¦   ¦           ¦   Microsoft.Extensions.DependencyInjection.dll
+¦   ¦           ¦   Microsoft.Extensions.Logging.Abstractions.dll
+¦   ¦           ¦   Microsoft.Extensions.Logging.dll
+¦   ¦           ¦   Microsoft.Extensions.Options.dll
+¦   ¦           ¦   Microsoft.Extensions.Primitives.dll
+¦   ¦           ¦   Microsoft.OpenApi.dll
+¦   ¦           ¦   Server.dll
+¦   ¦           ¦   Server.exe
+¦   ¦           ¦   Shared.dll
+¦   ¦           ¦   Swashbuckle.AspNetCore.Swagger.dll
+¦   ¦           ¦   Swashbuckle.AspNetCore.SwaggerGen.dll
+¦   ¦           ¦   Swashbuckle.AspNetCore.SwaggerUI.dll
+¦   ¦           ¦   System.ClientModel.dll
+¦   ¦           ¦   System.Memory.Data.dll
+¦   ¦           ¦   System.Text.Json.dll
+¦   ¦           ¦   
+¦   ¦           +---cs
+¦   ¦           +---de
+¦   ¦           +---es
+¦   ¦           +---fr
+¦   ¦           +---it
+¦   ¦           +---ja
+¦   ¦           +---ko
+¦   ¦           +---pl
+¦   ¦           +---pt-BR
+¦   ¦           +---ru
+¦   ¦           +---runtimes
+¦   ¦           ¦   +---win
+¦   ¦           ¦       +---lib
+¦   ¦           ¦           +---netstandard2.0
+¦   ¦           +---tr
+¦   ¦           +---zh-Hans
+¦   ¦           +---zh-Hant
+¦   +---Controllers
+¦   ¦       AuthController.cs
+¦   ¦       ClientController.cs
+¦   ¦       Controllers2
+¦   ¦       MachinesController.cs
+¦   ¦       SallesController.cs
+¦   ¦       UsersController.cs
+¦   ¦       
+¦   +---obj
+¦   ¦   ¦   project.assets.json
+¦   ¦   ¦   project.nuget.cache
+¦   ¦   ¦   Server.csproj.nuget.dgspec.json
+¦   ¦   ¦   Server.csproj.nuget.g.props
+¦   ¦   ¦   Server.csproj.nuget.g.targets
+¦   ¦   ¦   
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   ¦           ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+¦   ¦           ¦   apphost.exe
+¦   ¦           ¦   Server.assets.cache
+¦   ¦           ¦   Server.csproj.FileListAbsolute.txt
+¦   ¦           ¦   Server.GlobalUsings.g.cs
+¦   ¦           ¦   staticwebassets.references.upToDateCheck.txt
+¦   ¦           ¦   staticwebassets.removed.txt
+¦   ¦           ¦   
+¦   ¦           +---ref
+¦   ¦           +---refint
+¦   ¦           +---staticwebassets
+¦   +---Properties
+¦   ¦       launchSettings.json
+¦   ¦       
+¦   +---Services
+¦           AuthService.cs
+¦           AzureInfrastructureService.cs
+¦           AzureSalleDeFormationService.cs
+¦           ClientService.cs
+¦           MachineVirtuelleService.cs
+¦           SalleDeFormationService.cs
+¦           UtilisateurService.cs
+¦           
++---Shared
+¦   ¦   Class1.cs
+¦   ¦   Shared.csproj
+¦   ¦   
+¦   +---bin
+¦   ¦   +---Debug
+¦   ¦       +---net9.0
+¦   +---Dtos
+¦   ¦       ClientDto.cs
+¦   ¦       LoginDto.cs
+¦   ¦       MachineVirtuelleDto.cs
+¦   ¦       ProvisionningResultDto.cs
+¦   ¦       SalleDeFormationDto.cs
+¦   ¦       UtilisateurDto.cs
+¦   ¦       
+¦   +---obj
+¦       ¦   project.assets.json
+¦       ¦   project.nuget.cache
+¦       ¦   Shared.csproj.nuget.dgspec.json
+¦       ¦   Shared.csproj.nuget.g.props
+¦       ¦   Shared.csproj.nuget.g.targets
+¦       ¦   
+¦       +---Debug
+¦           +---net9.0
+¦               ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+¦               ¦   Shared.assets.cache
+¦               ¦   Shared.csproj.FileListAbsolute.txt
+¦               ¦   Shared.GlobalUsings.g.cs
+¦               ¦   
+¦               +---ref
+¦               +---refint
++---Test.CLI
+    ¦   appsettings.json
+    ¦   Program.cs
+    ¦   Test.CLI.csproj
+    ¦   
+    +---bin
+    ¦   +---Debug
+    ¦       +---net9.0
+    ¦           +---runtimes
+    ¦               +---win
+    ¦                   +---lib
+    ¦                       +---netstandard2.0
+    +---obj
+    ¦   ¦   project.assets.json
+    ¦   ¦   project.nuget.cache
+    ¦   ¦   Test.CLI.csproj.nuget.dgspec.json
+    ¦   ¦   Test.CLI.csproj.nuget.g.props
+    ¦   ¦   Test.CLI.csproj.nuget.g.targets
+    ¦   ¦   
+    ¦   +---Debug
+    ¦       +---net9.0
+    ¦           ¦   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+    ¦           ¦   apphost.exe
+    ¦           ¦   Test.CLI.assets.cache
+    ¦           ¦   Test.CLI.csproj.BuildWithSkipAnalyzers
+    ¦           ¦   Test.CLI.csproj.FileListAbsolute.txt
+    ¦           ¦   Test.CLI.GlobalUsings.g.cs
+    ¦           ¦   
+    ¦           +---ref
+    ¦           +---refint
+    +---Properties
+            launchSettings.json
+            
