@@ -1,0 +1,24 @@
+@page "/securelogin"
+@using Shared.Dtos
+
+<h3>Connexion Sécurisée</h3>
+
+<EditForm Model="loginModel" OnValidSubmit="HandleSecureLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label>Email</label>
+        <InputText class="form-control" @bind-Value="loginModel.Username" />
+    </div>
+    <div class="mb-3">
+        <label>Mot de passe</label>
+        <InputText class="form-control" @bind-Value="loginModel.Password" type="password" />
+    </div>
+    <button class="btn btn-primary" type="submit" disabled="@IsLoading">Connexion</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="HandleSecureLogin2" disabled="@IsLoading">Connexion2</button>
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert alert-danger mt-2">@ErrorMessage</div>
+    }
+</EditForm>
+
