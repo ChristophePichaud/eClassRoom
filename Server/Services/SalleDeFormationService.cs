@@ -1,5 +1,4 @@
 using EFModel;
-using EFModel.Models;
 using Shared.Dtos;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Server.Services;
 using Shared.Dtos;
-using EFModel.Models;
 using EFModel;
 
 namespace Server.Services

@@ -1,5 +1,4 @@
 using EFModel;
-using EFModel.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Services

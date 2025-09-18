@@ -42,16 +42,16 @@ namespace Server.Services
 
             var vmData = new VirtualMachineData(location)
             {
-                HardwareProfile = new HardwareProfile { VmSize = VirtualMachineSizeType.StandardD2V3 },
-                StorageProfile = new StorageProfile
+                HardwareProfile = new VirtualMachineHardwareProfile() { VmSize = VirtualMachineSizeType.StandardD2V3 },
+                StorageProfile = new VirtualMachineStorageProfile()
                 {
-                    OSDisk = new OSDisk(DiskCreateOptionType.FromImage)
+                    OSDisk = new VirtualMachineOSDisk(DiskCreateOptionType.FromImage)
                     {
                         Name = $"{vmName}-osdisk",
                         Caching = CachingType.ReadWrite,
-                        ManagedDisk = new ManagedDiskParameters { StorageAccountType = StorageAccountType.StandardLrs }
+                        ManagedDisk = new VirtualMachineManagedDisk() { StorageAccountType = StorageAccountType.StandardLrs }
                     },
-                    ImageReference = new ImageReference
+                    ImageReference = new ImageReference()
                     {
                         Publisher = "MicrosoftWindowsDesktop",
                         Offer = "Windows-10",
@@ -59,16 +59,21 @@ namespace Server.Services
                         Version = "latest"
                     }
                 },
-                OSProfile = new OSProfile
+                OSProfile = new VirtualMachineOSProfile()
                 {
                     ComputerName = vmName,
                     AdminUsername = adminUser,
                     AdminPassword = adminPassword
                 },
-                NetworkProfile = new NetworkProfile
+                NetworkProfile = new VirtualMachineNetworkProfile()
                 {
-                    NetworkInterfaces = {
-                        new NetworkInterfaceReference { Id = nicResourceId, Primary = true }
+                    NetworkInterfaces =
+                    {
+                        new VirtualMachineNetworkInterfaceReference()
+                        {
+                            Id = new Azure.Core.ResourceIdentifier(nicResourceId),
+                            Primary = true
+                        }
                     }
                 }
             };
@@ -107,7 +112,7 @@ namespace Server.Services
             var ipData = new PublicIPAddressData()
             {
                 Location = location,
-                PublicIPAllocationMethod = IPAllocationMethod.Static,
+                PublicIPAllocationMethod = NetworkIPAllocationMethod.Static,
                 Sku = new PublicIPAddressSku() { Name = PublicIPAddressSkuName.Standard }
             };
             var ipLro = await ipCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, ipName, ipData);
@@ -126,13 +131,13 @@ namespace Server.Services
             var nicData = new NetworkInterfaceData()
             {
                 Location = location,
-                IpConfigurations =
+                IPConfigurations =
                 {
                     new NetworkInterfaceIPConfigurationData()
                     {
                         Name = $"{nicName}-ipconfig",
-                        Subnet = new SubnetData() { Id = subnetId },
-                        PublicIPAddress = new PublicIPAddressData() { Id = publicIpId }
+                        Subnet = new SubnetData() { Id = new Azure.Core.ResourceIdentifier(subnetId) },
+                        PublicIPAddress = new PublicIPAddressData() { Id = new Azure.Core.ResourceIdentifier(publicIpId) }
                     }
                 }
             };
