@@ -58,7 +58,7 @@ namespace Server.Services
             };
         }
 
-        public async Task AddAsync(UtilisateurDto dto)
+        public async Task<UtilisateurDto> AddAsync(UtilisateurDto dto)
         {
             var u = new Utilisateur
             {
@@ -71,12 +71,23 @@ namespace Server.Services
             };
             _db.Utilisateurs.Add(u);
             await _db.SaveChangesAsync();
+            // Retourne le DTO créé avec l'ID mis à jour
+            return new UtilisateurDto
+            {
+                Id = u.Id,
+                Email = u.Email,
+                Nom = u.Nom,
+                Prenom = u.Prenom,
+                MotDePasse = u.MotDePasse,
+                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                ClientId = u.ClientId
+            };
         }
 
-        public async Task UpdateAsync(int id, UtilisateurDto dto)
+        public async Task<UtilisateurDto> UpdateAsync(int id, UtilisateurDto dto)
         {
             var u = await _db.Utilisateurs.FindAsync(id);
-            if (u == null) return;
+            if (u == null) return null;
             u.Email = dto.Email;
             u.Nom = dto.Nom;
             u.Prenom = dto.Prenom;
@@ -84,14 +95,25 @@ namespace Server.Services
             u.Role = RoleUtilisateurHelper.FromStringToRoleUtilisateur(dto.Role);
             u.ClientId = dto.ClientId;
             await _db.SaveChangesAsync();
+            return new UtilisateurDto
+            {
+                Id = u.Id,
+                Email = u.Email,
+                Nom = u.Nom,
+                Prenom = u.Prenom,
+                MotDePasse = u.MotDePasse,
+                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                ClientId = u.ClientId
+            };
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var u = await _db.Utilisateurs.FindAsync(id);
-            if (u == null) return;
+            if (u == null) return false;
             _db.Utilisateurs.Remove(u);
             await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

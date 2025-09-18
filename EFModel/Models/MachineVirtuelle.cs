@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class MachineVirtuelle
 {
     public int Id { get; set; }
@@ -15,6 +17,5 @@ public class MachineVirtuelle
     public int StagiaireId { get; set; }
     public Utilisateur Stagiaire { get; set; }
 
-    public int SalleDeFormationId { get; set; }
-    public SalleDeFormation Salle { get; set; }
+    public ICollection<SalleDeFormation> Salles { get; set; } = new List<SalleDeFormation>();
 }

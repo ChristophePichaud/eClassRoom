@@ -22,7 +22,20 @@ namespace Server.Services
                 {
                     Id = s.Id,
                     Nom = s.Nom,
-                    Formateur = s.Formateur == null ? null : new UtilisateurDto
+                    ClientId = s.ClientId,
+                    Client = s.Client != null ? new ClientDto
+                    {
+                        Id = s.Client.Id,
+                        NomSociete = s.Client.NomSociete,
+                        Adresse = s.Client.Adresse,
+                        CodePostal = s.Client.CodePostal,
+                        Ville = s.Client.Ville,
+                        Pays = s.Client.Pays,
+                        EmailAdministrateur = s.Client.EmailAdministrateur,
+                        Mobile = s.Client.Mobile
+                    } : null,
+                    FormateurId = s.FormateurId,
+                    Formateur = s.Formateur != null ? new UtilisateurDto
                     {
                         Id = s.Formateur.Id,
                         Email = s.Formateur.Email,
@@ -31,7 +44,7 @@ namespace Server.Services
                         MotDePasse = s.Formateur.MotDePasse,
                         Role = s.Formateur.Role.ToString(),
                         ClientId = s.Formateur.ClientId
-                    },
+                    } : null,
                     DateDebut = s.DateDebut,
                     DateFin = s.DateFin,
                     Stagiaires = s.Stagiaires.Select(u => new UtilisateurDto
@@ -59,7 +72,20 @@ namespace Server.Services
             {
                 Id = s.Id,
                 Nom = s.Nom,
-                Formateur = s.Formateur == null ? null : new UtilisateurDto
+                ClientId = s.ClientId,
+                Client = s.Client != null ? new ClientDto
+                {
+                    Id = s.Client.Id,
+                    NomSociete = s.Client.NomSociete,
+                    Adresse = s.Client.Adresse,
+                    CodePostal = s.Client.CodePostal,
+                    Ville = s.Client.Ville,
+                    Pays = s.Client.Pays,
+                    EmailAdministrateur = s.Client.EmailAdministrateur,
+                    Mobile = s.Client.Mobile
+                } : null,
+                FormateurId = s.FormateurId,
+                Formateur = s.Formateur != null ? new UtilisateurDto
                 {
                     Id = s.Formateur.Id,
                     Email = s.Formateur.Email,
@@ -68,7 +94,7 @@ namespace Server.Services
                     MotDePasse = s.Formateur.MotDePasse,
                     Role = s.Formateur.Role.ToString(),
                     ClientId = s.Formateur.ClientId
-                },
+                } : null,
                 DateDebut = s.DateDebut,
                 DateFin = s.DateFin,
                 Stagiaires = s.Stagiaires.Select(u => new UtilisateurDto

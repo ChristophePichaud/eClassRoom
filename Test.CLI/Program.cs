@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Server.Services;
 using Shared.Dtos;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Test.CLI
 {
@@ -18,6 +19,9 @@ namespace Test.CLI
 
         [Option('b', "virtualroom", Required = false, HelpText = "Create a sample VirtualRoom.")]
         public bool CreateVirtualRoom { get; set; }
+
+        [Option('c', "createsalle", Required = false, HelpText = "Create a SalleDeFormation only.")]
+        public bool CreateSalle { get; set; }
     }
 
     class Program
@@ -25,10 +29,10 @@ namespace Test.CLI
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(RunOptions);
+                .WithParsed(opts => RunOptionsAsync(opts).Wait());
         }
 
-        static void RunOptions(Options opts)
+        static async Task RunOptionsAsync(Options opts)
         {
             // Load configuration
             var config = new ConfigurationBuilder()
@@ -44,10 +48,14 @@ namespace Test.CLI
 
             using var db = new EClassRoomDbContext(options);
 
+            var clientService = new ClientService(db);
+            var utilisateurService = new UtilisateurService(db);
+            var salleService = new SalleDeFormationService(db);
+
             if (opts.CreateAdmin)
             {
-                // Create a sample client
-                var client = new Client
+                // Crée un client via DTO/service
+                var clientDto = new ClientDto
                 {
                     NomSociete = "SampleCorp",
                     Adresse = "123 Rue de Test",
@@ -58,54 +66,109 @@ namespace Test.CLI
                     Mobile = "0600000000",
                     MotDePasseAdministrateur = "admin123"
                 };
-                db.Clients.Add(client);
-                db.SaveChanges();
+                var createdClient = await clientService.AddAsync(clientDto);
 
-                // Create a sample admin user
-                var admin = new Utilisateur
+                // Crée un utilisateur admin via DTO/service
+                var adminDto = new UtilisateurDto
                 {
                     Email = "admin@samplecorp.com",
                     Nom = "Admin",
                     Prenom = "Super",
                     MotDePasse = "admin123",
-                    Role = RoleUtilisateur.Administrateur,
-                    ClientId = client.Id
+                    Role = RoleUtilisateur.Administrateur.ToString(),
+                    ClientId = createdClient.Id
                 };
-                db.Utilisateurs.Add(admin);
-                db.SaveChanges();
+                var createdAdmin = await utilisateurService.AddAsync(adminDto);
 
-                Console.WriteLine($"Sample admin user and customer created. ClientId={client.Id}, AdminId={admin.Id}");
+                Console.WriteLine($"Sample admin user and customer created. ClientId={createdClient.Id}, AdminId={createdAdmin.Id}");
             }
 
             if (opts.CreateVirtualRoom)
             {
-                // Find a client and a formateur (admin)
-                var client = db.Clients.FirstOrDefault();
-                var formateur = db.Utilisateurs.FirstOrDefault(u => u.Role == RoleUtilisateur.Administrateur);
+                // Récupère un client et un admin via service
+                var clientsList = await clientService.GetAllAsync();
+                var client = clientsList.FirstOrDefault();
+                var utilisateursList = await utilisateurService.GetAllAsync();
+                var formateur = utilisateursList.FirstOrDefault(u => u.Role == RoleUtilisateur.Administrateur.ToString());
                 if (client == null || formateur == null)
                 {
                     Console.WriteLine("No client or admin user found. Run with -a first.");
                     return;
                 }
 
-                // Create a sample stagiaire
-                var stagiaire = new Utilisateur
+                // Crée un stagiaire via DTO/service
+                var stagiaireDto = new UtilisateurDto
                 {
                     Email = "stagiaire@samplecorp.com",
                     Nom = "Stagiaire",
                     Prenom = "Test",
                     MotDePasse = "stagiaire123",
-                    Role = RoleUtilisateur.Stagiaire,
+                    Role = RoleUtilisateur.Stagiaire.ToString(),
                     ClientId = client.Id
                 };
-                db.Utilisateurs.Add(stagiaire);
-                db.SaveChanges();
+                var createdStagiaire = await utilisateurService.AddAsync(stagiaireDto);
 
-                // Create a virtual room DTO
+                // Crée une salle de formation via DTO/service
                 var salleDto = new SalleDeFormationDto
                 {
                     ClientId = client.Id,
+                    Client = client, // Ajout du client dans le DTO
                     Nom = "Formation PostgreSQL",
+                    FormateurId = formateur.Id,
+                    Formateur = formateur,
+                    DateDebut = DateTime.UtcNow,
+                    DateFin = DateTime.UtcNow.AddDays(3),
+                    Stagiaires = new List<UtilisateurDto> { createdStagiaire }
+                };
+
+                await salleService.AddAsync(salleDto);
+
+                Console.WriteLine($"Sample virtual room created. Nom={salleDto.Nom}");
+            }
+
+            if (opts.CreateSalle)
+            {
+                var client = await db.Clients.FirstOrDefaultAsync();
+                var formateur = await db.Utilisateurs.FirstOrDefaultAsync(u => u.Role == RoleUtilisateur.Administrateur);
+                if (client == null || formateur == null)
+                {
+                    Console.WriteLine("No client or admin user found. Run with -a first.");
+                    return;
+                }
+                // Exemple d'ajout d'une machine virtuelle liée à la salle via la relation many-to-many
+                var machine = new MachineVirtuelle
+                {
+                    Name = "VM-Test",
+                    TypeOS = "Windows",
+                    TypeVM = "Standard",
+                    Sku = "Standard_B2s",
+                    Offer = "WindowsServer",
+                    Version = "2019-Datacenter",
+                    DiskISO = "iso/path",
+                    NomMarketingVM = "VM Marketing",
+                    FichierRDP = "file.rdp",
+                    Supervision = "Aucune",
+                    StagiaireId = formateur.Id // ou un stagiaire réel
+                };
+                db.MachinesVirtuelles.Add(machine);
+                await db.SaveChangesAsync();
+
+                var salleDto = new SalleDeFormationDto
+                {
+                    ClientId = client.Id,
+                    Client = new ClientDto
+                    {
+                        Id = client.Id,
+                        NomSociete = client.NomSociete,
+                        Adresse = client.Adresse,
+                        CodePostal = client.CodePostal,
+                        Ville = client.Ville,
+                        Pays = client.Pays,
+                        EmailAdministrateur = client.EmailAdministrateur,
+                        Mobile = client.Mobile
+                    },
+                    Nom = "Salle Test CLI",
+                    FormateurId = formateur.Id,
                     Formateur = new UtilisateurDto
                     {
                         Id = formateur.Id,
@@ -117,27 +180,29 @@ namespace Test.CLI
                         ClientId = formateur.ClientId
                     },
                     DateDebut = DateTime.UtcNow,
-                    DateFin = DateTime.UtcNow.AddDays(3),
-                    Stagiaires = new List<UtilisateurDto>
-                    {
-                        new UtilisateurDto
-                        {
-                            Id = stagiaire.Id,
-                            Email = stagiaire.Email,
-                            Nom = stagiaire.Nom,
-                            Prenom = stagiaire.Prenom,
-                            MotDePasse = stagiaire.MotDePasse,
-                            Role = stagiaire.Role.ToString(),
-                            ClientId = stagiaire.ClientId
-                        }
-                    }
+                    DateFin = DateTime.UtcNow.AddDays(1),
+                    Stagiaires = new List<UtilisateurDto>()
                 };
-
-                // Use the service to add the room
-                var salleService = new SalleDeFormationService(db);
-                salleService.AddAsync(salleDto).Wait();
-
-                Console.WriteLine($"Sample virtual room created. Nom={salleDto.Nom}");
+                // Ajout via service (la gestion de l'association many-to-many doit être gérée dans le service)
+                var optionsWithLogging = new DbContextOptionsBuilder<EClassRoomDbContext>()
+                    .UseNpgsql(connectionString)
+                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
+                    .Options;
+                using (var dbWithLogging = new EClassRoomDbContext(optionsWithLogging))
+                {
+                    var salleServiceWithLogging = new SalleDeFormationService(dbWithLogging);
+                    // Ajout de la salle
+                    await salleServiceWithLogging.AddAsync(salleDto);
+                    // Récupération de la salle créée
+                    var salle = await dbWithLogging.SallesDeFormation.OrderByDescending(s => s.Id).FirstOrDefaultAsync();
+                    if (salle != null)
+                    {
+                        // Ajout de la relation many-to-many
+                        salle.Machines.Add(machine);
+                        await dbWithLogging.SaveChangesAsync();
+                    }
+                }
+                Console.WriteLine($"SalleDeFormation créée : {salleDto.Nom}");
             }
         }
     }

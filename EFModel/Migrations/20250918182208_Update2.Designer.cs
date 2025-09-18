@@ -3,6 +3,7 @@ using System;
 using EFModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFModel.Migrations
 {
     [DbContext(typeof(EClassRoomDbContext))]
-    partial class EClassRoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250918182208_Update2")]
+    partial class Update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,6 +201,9 @@ namespace EFModel.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("ClientId1")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateDebut")
                         .HasColumnType("timestamp with time zone");
 
@@ -214,6 +220,8 @@ namespace EFModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("ClientId1");
 
                     b.HasIndex("FormateurId");
 
@@ -321,10 +329,14 @@ namespace EFModel.Migrations
             modelBuilder.Entity("SalleDeFormation", b =>
                 {
                     b.HasOne("Client", "Client")
-                        .WithMany("SallesDeFormation")
+                        .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Client", null)
+                        .WithMany("SallesDeFormation")
+                        .HasForeignKey("ClientId1");
 
                     b.HasOne("Utilisateur", "Formateur")
                         .WithMany()

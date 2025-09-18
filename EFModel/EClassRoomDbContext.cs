@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using EFModel;
 
 namespace EFModel
 {
@@ -9,13 +10,12 @@ namespace EFModel
         {
         }
 
-
-    public DbSet<Utilisateur> Utilisateurs { get; set; }
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<SalleDeFormation> SallesDeFormation { get; set; }
-    public DbSet<ProvisionningVM> ProvisionningVMs { get; set; }
-    public DbSet<Facture> Factures { get; set; }
-    public DbSet<MachineVirtuelle> MachinesVirtuelles { get; set; }
+        public DbSet<Utilisateur> Utilisateurs { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<SalleDeFormation> SallesDeFormation { get; set; }
+        public DbSet<ProvisionningVM> ProvisionningVMs { get; set; }
+        public DbSet<Facture> Factures { get; set; }
+        public DbSet<MachineVirtuelle> MachinesVirtuelles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,23 +38,18 @@ namespace EFModel
                 .WithMany(c => c.Utilisateurs)
                 .HasForeignKey(u => u.ClientId);
 
-            // Client - SalleDeFormation
+            // Client - SalleDeFormation (relation explicite avec navigation inverse)
             modelBuilder.Entity<SalleDeFormation>()
                 .HasOne(s => s.Client)
-                .WithMany(c => c.Salles)
-                .HasForeignKey(s => s.ClientId);
+                .WithMany(c => c.SallesDeFormation)
+                .HasForeignKey(s => s.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Client - Facture
             modelBuilder.Entity<Facture>()
                 .HasOne(f => f.Client)
                 .WithMany()
                 .HasForeignKey(f => f.ClientId);
-
-            // SalleDeFormation - MachineVirtuelle
-            modelBuilder.Entity<MachineVirtuelle>()
-                .HasOne(m => m.Salle)
-                .WithMany(s => s.Machines)
-                .HasForeignKey(m => m.SalleDeFormationId);
 
             // SalleDeFormation - Stagiaires (many-to-many possible, à adapter si navigation)
 
@@ -63,6 +58,31 @@ namespace EFModel
                 .HasOne(m => m.Stagiaire)
                 .WithMany()
                 .HasForeignKey(m => m.StagiaireId);
+
+            // Many-to-many SalleDeFormation <-> MachineVirtuelle
+            modelBuilder.Entity<SalleDeFormation>()
+                .HasMany(s => s.Machines)
+                .WithMany(m => m.Salles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "SalleDeFormationMachineVirtuelle",
+                    j => j
+                        .HasOne<MachineVirtuelle>()
+                        .WithMany()
+                        .HasForeignKey("MachineVirtuelleId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<SalleDeFormation>()
+                        .WithMany()
+                        .HasForeignKey("SalleDeFormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
+
+            // SalleDeFormation - Formateur (Utilisateur)
+            modelBuilder.Entity<SalleDeFormation>()
+                .HasOne(s => s.Formateur)
+                .WithMany()
+                .HasForeignKey(s => s.FormateurId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

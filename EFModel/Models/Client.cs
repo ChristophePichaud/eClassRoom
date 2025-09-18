@@ -13,5 +13,5 @@ using System.Collections.Generic;
         public string MotDePasseAdministrateur { get; set; }
 
         public ICollection<Utilisateur> Utilisateurs { get; set; }
-        public ICollection<SalleDeFormation> Salles { get; set; }
+        public ICollection<SalleDeFormation> SallesDeFormation { get; set; } = new List<SalleDeFormation>();
     }
