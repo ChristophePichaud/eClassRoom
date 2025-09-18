@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using MyBlazorApp.Server.Data;
+using EFModel;
 
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<EClassRoomDbContext>(options =>
             options.UseNpgsql("Your_PostgreSQL_Connection_String_Here"));
 
         services.AddControllers();
-        services.AddScoped<IYourService, YourService>(); // Register your services here
+    services.AddScoped<Server.Services.AuthService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

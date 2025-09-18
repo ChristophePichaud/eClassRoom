@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-namespace EFModel.Models
-{
     public class ProvisionningVM
     {
         public int Id { get; set; }
@@ -14,4 +12,3 @@ namespace EFModel.Models
         public string PublicIp { get; set; }
         public DateTime DateProvisionning { get; set; }
     }
-}

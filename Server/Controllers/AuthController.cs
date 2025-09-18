@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Shared.Dtos;
+using Server.Services;
 
 namespace eClassRoom.Server.Controllers
 {
@@ -10,49 +8,26 @@ namespace eClassRoom.Server.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        public AuthController(IConfiguration config)
+        private readonly AuthService _authService;
+        public AuthController(AuthService authService)
         {
-            _config = config;
+            _authService = authService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginDto login)
+        public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
-            // TODO: Valider les identifiants (vérifier le hash du mot de passe)
-            if (login.Username == "admin" && login.Password == "password") // À remplacer par la vraie logique
+            var user = await _authService.ValidateUserAsync(login.Username, login.Password);
+            if (user != null)
             {
-                var token = GenerateJwtToken(login.Username);
+                var token = _authService.GenerateJwtToken(user);
                 return Ok(new { token });
             }
             return Unauthorized();
         }
 
-        private string GenerateJwtToken(string username)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, username)
-                // Ajouter d'autres claims si besoin
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(2),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        // La génération du token est déléguée au service
     }
 
-    public class LoginDto
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
+    // LoginDto est dans Shared.Dtos
 }

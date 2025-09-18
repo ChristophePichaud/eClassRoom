@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using EFModel.Models;
 
 namespace EFModel
 {

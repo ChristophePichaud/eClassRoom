@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-namespace EFModel.Models
-{
     public class Client
     {
         public int Id { get; set; }
@@ -17,4 +15,3 @@ namespace EFModel.Models
         public ICollection<Utilisateur> Utilisateurs { get; set; }
         public ICollection<SalleDeFormation> Salles { get; set; }
     }
-}
