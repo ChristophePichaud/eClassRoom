@@ -13,8 +13,6 @@ builder.Services.AddScoped<MachineVirtuelleService>();
 builder.Services.AddScoped<SalleDeFormationService>();
 builder.Services.AddScoped<SecurityService>();
 builder.Services.AddScoped<UtilisateurService>();
-builder.Services.AddScoped<SimpleService>();
-builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EClassRoomDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -59,6 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 app.UseCors("AllowClient"); // Placez ceci AVANT UseAuthentication et UseAuthorization
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
