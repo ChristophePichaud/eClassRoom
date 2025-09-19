@@ -28,11 +28,15 @@ public class UtilisateursBase : ComponentBase
 
     protected async Task LoadClients()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/clients");
     }
 
     protected async Task LoadUtilisateurs()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         isLoading = true;
         utilisateurs = await Http.GetFromJsonAsync<List<UtilisateurDto>>("api/users");
         isLoading = false;
@@ -63,6 +67,8 @@ public class UtilisateursBase : ComponentBase
 
     protected async Task SaveUtilisateur()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         if (isEdit)
         {
             await Http.PutAsJsonAsync($"api/users/{editUtilisateur.Id}", editUtilisateur);
@@ -77,6 +83,8 @@ public class UtilisateursBase : ComponentBase
 
     protected async Task DeleteUtilisateur(int id)
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         await Http.DeleteAsync($"api/users/{id}");
         await LoadUtilisateurs();
     }

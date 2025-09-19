@@ -49,6 +49,7 @@ namespace Client.Pages
                     Http = new HttpClient();
                     var request = new HttpRequestMessage(HttpMethod.Get, "api/clients"); // <-- "clients" au pluriel
                     request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                    Http = new HttpClient();
                     Http.BaseAddress = new Uri("http://localhost:5020/");
                     var response = await Http.SendAsync(request);
                     if (response.IsSuccessStatusCode)
@@ -82,6 +83,8 @@ namespace Client.Pages
                 var request = new HttpRequestMessage(HttpMethod.Get, "api/clients");
                 // Le handler personnalisé ajoutera automatiquement le header Authorization
 
+                Http = new HttpClient();
+                Http.BaseAddress = new Uri("http://localhost:5020/");
                 var response = await Http.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
@@ -135,6 +138,9 @@ namespace Client.Pages
 
         protected async Task SaveClient()
         {
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
+
             if (isEdit)
             {
                 var response = await Http.PutAsJsonAsync($"api/clients/{editClient.Id}", editClient);
@@ -159,6 +165,8 @@ namespace Client.Pages
 
         protected async Task DeleteClient(int id)
         {
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
             var response = await Http.DeleteAsync($"api/clients/{id}");
             if (response.IsSuccessStatusCode)
             {

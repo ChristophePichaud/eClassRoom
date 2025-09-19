@@ -14,10 +14,10 @@ public class MachinesVirtuellesBase : ComponentBase
     protected bool isLoading = true;
     protected bool isEdit = false;
 
-        private async Task<string> GetTokenAsync()
-        {
-            return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
-        }
+    private async Task<string> GetTokenAsync()
+    {
+        return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,6 +27,8 @@ public class MachinesVirtuellesBase : ComponentBase
     protected async Task LoadMachines()
     {
         isLoading = true;
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         machines = await Http.GetFromJsonAsync<List<MachineVirtuelleDto>>("api/machines");
         isLoading = false;
     }
@@ -58,6 +60,8 @@ public class MachinesVirtuellesBase : ComponentBase
 
     protected async Task SaveVm()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         if (isEdit)
         {
             await Http.PutAsJsonAsync($"api/machines/{editVm.Id}", editVm);
@@ -72,6 +76,8 @@ public class MachinesVirtuellesBase : ComponentBase
 
     protected async Task DeleteVm(int id)
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         await Http.DeleteAsync($"api/machines/{id}");
         await LoadMachines();
     }

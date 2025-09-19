@@ -16,7 +16,7 @@ namespace ADP.Ecarb.DailyImportProjects
                 Console.WriteLine("Arg:{0}", arg);
             }
 
-            DailyImportProcess dip = new DailyImportProcess();
+            SampleCalls dip = new SampleCalls();
             await dip.DoWorkAsync();
         }
     }

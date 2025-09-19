@@ -1,0 +1,22 @@
+@page "/simple-queries"
+@inherits SimpleQueriesBase
+
+<h3>Simple Service Queries</h3>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (results != null)
+{
+    <ul>
+        @foreach (var result in results)
+        {
+            <li>@result</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No results.</p>
+}

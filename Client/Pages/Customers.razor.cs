@@ -30,7 +30,9 @@ namespace Client.Pages
 
         protected async Task LoadClients()
         {
-            Clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/client");
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
+            Clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/clients");
         }
 
         protected void ShowCreateForm()
@@ -66,6 +68,8 @@ namespace Client.Pages
 
         protected async Task SaveClient()
         {
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
             if (IsEdit)
                 await Http.PutAsJsonAsync($"api/clients/{EditingClient.Id}", EditingClient);
             else
@@ -77,6 +81,8 @@ namespace Client.Pages
 
         protected async Task DeleteClient(int id)
         {
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
             await Http.DeleteAsync($"api/clients/{id}");
             await LoadClients();
         }

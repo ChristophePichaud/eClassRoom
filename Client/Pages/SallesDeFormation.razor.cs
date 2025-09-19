@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 public class SallesDeFormationBase : ComponentBase
 {
-        [Inject] public HttpClient Http { get; set; }
-        [Inject] public IJSRuntime JS { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
 
     protected List<SalleDeFormationDto> salles = new();
     protected SalleDeFormationDto editSalle = new();
@@ -30,9 +30,9 @@ public class SallesDeFormationBase : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        //await LoadFormateurs();
+        await LoadFormateurs();
         await LoadClients();
-        //await LoadSalles();
+        await LoadSalles();
     }
 
     protected async Task LoadClients()
@@ -67,12 +67,16 @@ public class SallesDeFormationBase : ComponentBase
 
     protected async Task LoadFormateurs()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         var allUsers = await Http.GetFromJsonAsync<List<UtilisateurDto>>("api/users");
         formateurs = allUsers?.Where(u => u.Role == "Formateur").ToList() ?? new List<UtilisateurDto>();
     }
 
     protected async Task LoadSalles()
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         isLoading = true;
         salles = await Http.GetFromJsonAsync<List<SalleDeFormationDto>>("api/salles");
         isLoading = false;
@@ -120,6 +124,9 @@ public class SallesDeFormationBase : ComponentBase
                 };
             }
         }
+
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         if (isEdit)
         {
             await Http.PutAsJsonAsync($"api/salles/{editSalle.Id}", editSalle);
@@ -134,6 +141,8 @@ public class SallesDeFormationBase : ComponentBase
 
     protected async Task DeleteSalle(int id)
     {
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
         await Http.DeleteAsync($"api/salles/{id}");
         await LoadSalles();
     }

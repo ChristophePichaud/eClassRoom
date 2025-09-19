@@ -13,10 +13,23 @@ builder.Services.AddScoped<MachineVirtuelleService>();
 builder.Services.AddScoped<SalleDeFormationService>();
 builder.Services.AddScoped<SecurityService>();
 builder.Services.AddScoped<UtilisateurService>();
+builder.Services.AddScoped<SimpleService>();
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EClassRoomDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5132", "https://localhost:5001") // URLs du client Blazor
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 var secret = builder.Configuration["JwtCredentials:Secret"];
 var secret2 = builder.Configuration.GetSection("JwtCredentials")["Secret"];
@@ -45,6 +58,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 var app = builder.Build();
 
+app.UseCors("AllowClient"); // Placez ceci AVANT UseAuthentication et UseAuthorization
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
