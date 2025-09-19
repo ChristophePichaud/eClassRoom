@@ -15,7 +15,7 @@
         <InputText class="form-control" @bind-Value="loginModel.Password" type="password" />
     </div>
     <button class="btn btn-primary" type="submit" disabled="@IsLoading">Connexion</button>
-    <button class="btn btn-secondary ms-2" type="button" @onclick="HandleSecureLogin2" disabled="@IsLoading">Connexion2</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="CallProtectedApiWithPost" disabled="@IsLoading">CallProtectedApiWithPost</button>
     @if (!string.IsNullOrEmpty(ErrorMessage))
     {
         <div class="alert alert-danger mt-2">@ErrorMessage</div>

@@ -4,7 +4,7 @@ using Shared.Dtos;
 using Server.Services;
 using System.Threading.Tasks;
 
-namespace Server.Controllers
+namespace eClassRoom.Server.Controllers
 {
     [ApiController]
     [Route("api/security")]

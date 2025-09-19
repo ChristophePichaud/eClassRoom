@@ -3,11 +3,11 @@ using Server.Services;
 using Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Server.Controllers
+namespace eClassRoom.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize]
+    [Route("api/salles")]
+    //[Authorize]
     public class SallesController : ControllerBase
     {
         private readonly SalleDeFormationService _service;

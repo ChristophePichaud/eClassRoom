@@ -1,0 +1,52 @@
+﻿{
+  "projects": [
+    {
+      "id": 0,
+      "reference": "string",
+      "name": "project-A",
+      "siteId": 0,
+      "moaId": 0,
+      "financerId": 0,
+      "amount": 0,
+      "projectStatusId": 0,
+      "countryId": 0,
+      "codePI": "string",
+      "startingDate": "2025-02-20T13:24:31.594Z",
+      "commissioningDate": "2025-02-20T13:24:31.594Z",
+      "annualEmissionReduction": 0,
+      "inputType": 0,
+      "affairs": [
+        {
+          "id": 0,
+          "numAffair": "string",
+          "name": "string",
+          "moaId": 0,
+          "financerId": 0,
+          "projectStatusId": 0,
+          "siteId": 0,
+          "capex": 0,
+          "countryId": 0,
+          "investPost": "string",
+          "startingDate": "2025-02-20T13:24:31.594Z",
+          "commissioningDate": "2025-02-20T13:24:31.594Z"
+        }
+      ],
+      "elements": [
+        {
+          "name": "string",
+          "affairId": 0,
+          "processId": 0,
+          "investmentAmount": 0,
+          "workStartingYear": 0,
+          "refElementId": 0,
+          "studyUFItems": [
+            {
+              "year": 0,
+              "percentage": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

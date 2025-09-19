@@ -1,15 +1,20 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+using Shared.Dtos;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Shared.Dtos;
 
 namespace Client.Pages
 {
     public class ClientsBase : ComponentBase
     {
-        [Inject] protected HttpClient Http { get; set; }
+        [Inject] public HttpClient Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
 
         protected List<ClientDto> clients;
         protected bool isLoading = true;
@@ -17,15 +22,82 @@ namespace Client.Pages
         protected bool isEdit = false;
         protected ClientDto editClient = new();
 
+        private async Task<string> GetTokenAsync()
+        {
+            return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+        }
+
         protected override async Task OnInitializedAsync()
         {
-            await LoadClientsAsync();
+            await LoadClientsWithHandlerAsync();
         }
 
         protected async Task LoadClientsAsync()
         {
             isLoading = true;
-            clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/clients");
+            try
+            {
+                Console.WriteLine("Essai de récupération du Token stocké...");
+                var token = await GetTokenAsync();
+                Console.WriteLine("Token stocké : " + token);
+
+                // Utilisez l'instance Http injectée (déjà configurée avec le handler d'authentification si configuré dans Program.cs)
+                // Ne pas recréer un nouveau HttpClient ici
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    Http = new HttpClient();
+                    var request = new HttpRequestMessage(HttpMethod.Get, "api/clients"); // <-- "clients" au pluriel
+                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                    Http.BaseAddress = new Uri("http://localhost:5020/");
+                    var response = await Http.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        clients = await response.Content.ReadFromJsonAsync<List<ClientDto>>();
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        Console.WriteLine("Erreur 401 : Token JWT manquant ou invalide.");
+                        // Afficher un message à l'utilisateur ou rediriger vers la page de login
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Aucun token trouvé, accès refusé.");
+                    // Afficher un message à l'utilisateur ou rediriger vers la page de login
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la récupération des clients : " + ex.Message);
+            }
+            isLoading = false;
+        }
+
+        protected async Task LoadClientsWithHandlerAsync()
+        {
+            isLoading = true;
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "api/clients");
+                // Le handler personnalisé ajoutera automatiquement le header Authorization
+
+                var response = await Http.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    clients = await response.Content.ReadFromJsonAsync<List<ClientDto>>();
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    Console.WriteLine("Erreur 401 : Token JWT manquant ou invalide.");
+                    // Afficher un message à l'utilisateur ou rediriger vers la page de login
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la récupération des clients : " + ex.Message);
+            }
             isLoading = false;
         }
 

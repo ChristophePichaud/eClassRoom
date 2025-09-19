@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Server.Controllers
+namespace eClassRoom.Server.Controllers
 {
     [ApiController]
-    //[Route("api/[controller]")]
-    [Route("api/client")]
-    [Authorize]
+    [Route("api/clients")]
+    //[Authorize] // <--- Add this line
     public class ClientController : ControllerBase
     {
         private readonly ClientService _service;

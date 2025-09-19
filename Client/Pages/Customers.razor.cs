@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Collections.Generic;
@@ -10,11 +11,17 @@ namespace Client.Pages
     public partial class Customers : ComponentBase
     {
         [Inject] public HttpClient Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
 
         protected List<ClientDto> Clients { get; set; } = new();
         protected ClientDto EditingClient { get; set; } = new();
         protected bool ShowForm { get; set; } = false;
         protected bool IsEdit { get; set; } = false;
+
+        private async Task<string> GetTokenAsync()
+        {
+            return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+        }
 
         protected override async Task OnInitializedAsync()
         {

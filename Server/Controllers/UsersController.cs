@@ -3,11 +3,11 @@ using Server.Services;
 using Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Server.Controllers
+namespace eClassRoom.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize]
+    [Route("api/users")]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly UtilisateurService _service;

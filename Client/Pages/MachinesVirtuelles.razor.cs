@@ -1,16 +1,23 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Shared.Dtos;
 using System.Net.Http.Json;
 
 public class MachinesVirtuellesBase : ComponentBase
 {
     [Inject] protected HttpClient Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
 
     protected List<MachineVirtuelleDto> machines = new();
     protected MachineVirtuelleDto editVm = new();
     protected bool showForm = false;
     protected bool isLoading = true;
     protected bool isEdit = false;
+
+        private async Task<string> GetTokenAsync()
+        {
+            return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+        }
 
     protected override async Task OnInitializedAsync()
     {
@@ -20,7 +27,7 @@ public class MachinesVirtuellesBase : ComponentBase
     protected async Task LoadMachines()
     {
         isLoading = true;
-        machines = await Http.GetFromJsonAsync<List<MachineVirtuelleDto>>("/machines");
+        machines = await Http.GetFromJsonAsync<List<MachineVirtuelleDto>>("api/machines");
         isLoading = false;
     }
 
@@ -53,11 +60,11 @@ public class MachinesVirtuellesBase : ComponentBase
     {
         if (isEdit)
         {
-            await Http.PutAsJsonAsync($"/machines/{editVm.Id}", editVm);
+            await Http.PutAsJsonAsync($"api/machines/{editVm.Id}", editVm);
         }
         else
         {
-            await Http.PostAsJsonAsync("/machines", editVm);
+            await Http.PostAsJsonAsync("api/machines", editVm);
         }
         showForm = false;
         await LoadMachines();
@@ -65,7 +72,7 @@ public class MachinesVirtuellesBase : ComponentBase
 
     protected async Task DeleteVm(int id)
     {
-        await Http.DeleteAsync($"/machines/{id}");
+        await Http.DeleteAsync($"api/machines/{id}");
         await LoadMachines();
     }
 

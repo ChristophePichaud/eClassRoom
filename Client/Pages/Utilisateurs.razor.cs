@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Shared.Dtos;
 using System.Net.Http.Json;
 
 public class UtilisateursBase : ComponentBase
 {
     [Inject] protected HttpClient Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
 
     protected List<UtilisateurDto> utilisateurs = new();
     protected UtilisateurDto editUtilisateur = new();
@@ -12,6 +14,11 @@ public class UtilisateursBase : ComponentBase
     protected bool showForm = false;
     protected bool isLoading = true;
     protected bool isEdit = false;
+
+    private async Task<string> GetTokenAsync()
+    {
+        return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -21,13 +28,13 @@ public class UtilisateursBase : ComponentBase
 
     protected async Task LoadClients()
     {
-        clients = await Http.GetFromJsonAsync<List<ClientDto>>("/clients");
+        clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/clients");
     }
 
     protected async Task LoadUtilisateurs()
     {
         isLoading = true;
-        utilisateurs = await Http.GetFromJsonAsync<List<UtilisateurDto>>("/users");
+        utilisateurs = await Http.GetFromJsonAsync<List<UtilisateurDto>>("api/users");
         isLoading = false;
     }
 
@@ -58,11 +65,11 @@ public class UtilisateursBase : ComponentBase
     {
         if (isEdit)
         {
-            await Http.PutAsJsonAsync($"/users/{editUtilisateur.Id}", editUtilisateur);
+            await Http.PutAsJsonAsync($"api/users/{editUtilisateur.Id}", editUtilisateur);
         }
         else
         {
-            await Http.PostAsJsonAsync("/users", editUtilisateur);
+            await Http.PostAsJsonAsync("api/users", editUtilisateur);
         }
         showForm = false;
         await LoadUtilisateurs();
@@ -70,7 +77,7 @@ public class UtilisateursBase : ComponentBase
 
     protected async Task DeleteUtilisateur(int id)
     {
-        await Http.DeleteAsync($"/users/{id}");
+        await Http.DeleteAsync($"api/users/{id}");
         await LoadUtilisateurs();
     }
 

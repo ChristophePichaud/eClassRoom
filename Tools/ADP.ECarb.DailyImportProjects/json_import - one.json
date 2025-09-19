@@ -1,0 +1,49 @@
+﻿{
+  "projects": [
+        {
+            "id": 205,
+            "reference": "205",
+            "name": "PROJECT-A",
+            "siteId": 8,
+            "moaId": 13,
+            "financerId": 9,
+            "amount": 2367,
+            "projectStatusId": 8,
+            "countryId": 1,
+            "codePI": "PI40M",
+            "startingDate": "2019-09-09T00:00:00Z",
+            "commissioningDate": "2019-12-20T00:00:00Z",
+            "inputType": 1,
+            "affairs": [
+                {
+                    "id": 3039,
+                    "numAffair": "256764",
+                    "name": "AFFAIRE 1",
+                    "moaId": 13,
+                    "financerId": 9,
+                    "projectStatusId": 8,
+                    "siteId": 8,
+                    "capex": 50,
+                    "countryId": 1,
+                    "investPost": "PI510",
+                    "startingDate": "2019-09-09T00:00:00Z",
+                    "commissioningDate": "2020-10-04T18:00:00Z"
+                },
+                {
+                    "id": 4616,
+                    "numAffair": "255738",
+                    "name": "AFFAIRE 2",
+                    "moaId": 14,
+                    "financerId": 9,
+                    "projectStatusId": 8,
+                    "siteId": 8,
+                    "capex": 5,
+                    "countryId": 1,
+                    "investPost": "PI512",
+                    "startingDate": "2019-04-08T00:00:00Z",
+                    "commissioningDate": "2020-09-03T00:00:00Z"
+                }
+            ]
+		}
+	]
+}

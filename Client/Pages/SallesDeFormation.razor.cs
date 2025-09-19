@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Shared.Dtos;
 using System.Net.Http.Json;
 using System.Collections.Generic;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 public class SallesDeFormationBase : ComponentBase
 {
-    [Inject] protected HttpClient Http { get; set; }
+        [Inject] public HttpClient Http { get; set; }
+        [Inject] public IJSRuntime JS { get; set; }
 
     protected List<SalleDeFormationDto> salles = new();
     protected SalleDeFormationDto editSalle = new();
@@ -21,28 +23,58 @@ public class SallesDeFormationBase : ComponentBase
     // List of clients for the combobox
     protected List<ClientDto> clients = new();
 
+    private async Task<string> GetTokenAsync()
+    {
+        return await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        await LoadFormateurs();
+        //await LoadFormateurs();
         await LoadClients();
-        await LoadSalles();
+        //await LoadSalles();
     }
 
     protected async Task LoadClients()
     {
-        clients = await Http.GetFromJsonAsync<List<ClientDto>>("Client");
+        var token = await GetTokenAsync();
+        if (!string.IsNullOrEmpty(token))
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/clients");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            Http = new HttpClient();
+            Http.BaseAddress = new Uri("http://localhost:5020/");
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                clients = await response.Content.ReadFromJsonAsync<List<ClientDto>>();
+                Console.WriteLine($"Clients chargés : {clients.Count}");
+            }
+            else
+            {
+                clients = new List<ClientDto>();
+                // Optionally handle unauthorized or error cases here
+                Console.WriteLine($"Erreur lors du chargement des clients : {response.StatusCode}");
+            }
+        }
+        else
+        {
+            clients = new List<ClientDto>();
+            // Optionally handle missing token here
+            Console.WriteLine("Token JWT manquant ou invalide.");
+        }
     }
 
     protected async Task LoadFormateurs()
     {
-        var allUsers = await Http.GetFromJsonAsync<List<UtilisateurDto>>("/users");
+        var allUsers = await Http.GetFromJsonAsync<List<UtilisateurDto>>("api/users");
         formateurs = allUsers?.Where(u => u.Role == "Formateur").ToList() ?? new List<UtilisateurDto>();
     }
 
     protected async Task LoadSalles()
     {
         isLoading = true;
-        salles = await Http.GetFromJsonAsync<List<SalleDeFormationDto>>("/salles");
+        salles = await Http.GetFromJsonAsync<List<SalleDeFormationDto>>("api/salles");
         isLoading = false;
     }
 
@@ -90,11 +122,11 @@ public class SallesDeFormationBase : ComponentBase
         }
         if (isEdit)
         {
-            await Http.PutAsJsonAsync($"/salles/{editSalle.Id}", editSalle);
+            await Http.PutAsJsonAsync($"api/salles/{editSalle.Id}", editSalle);
         }
         else
         {
-            await Http.PostAsJsonAsync("/salles", editSalle);
+            await Http.PostAsJsonAsync("api/salles", editSalle);
         }
         showForm = false;
         await LoadSalles();
@@ -102,7 +134,7 @@ public class SallesDeFormationBase : ComponentBase
 
     protected async Task DeleteSalle(int id)
     {
-        await Http.DeleteAsync($"/salles/{id}");
+        await Http.DeleteAsync($"api/salles/{id}");
         await LoadSalles();
     }
 
