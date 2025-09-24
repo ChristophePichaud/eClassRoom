@@ -1,0 +1,159 @@
+@startuml
+allow_mixing
+title Vue d'ensemble des classes et composants eClassRoom
+
+' === PACKAGES PRINCIPAUX ===
+package "Client" {
+    package "Pages" {
+        class ClientsBase <<razor code-behind>>
+        class UtilisateursBase <<razor code-behind>>
+        class SallesDeFormationBase <<razor code-behind>>
+        class MachinesVirtuellesBase <<razor code-behind>>
+        class Login <<razor code-behind>>
+        class SecureLogin <<razor code-behind>>
+        class Customers <<razor code-behind>>
+        ' ...autres pages Razor...
+    }
+    package "Layout" {
+        class MainLayout <<razor>>
+        class NavMenu <<razor>>
+    }
+    class Program <<startup>>
+    class CustomAuthorizationMessageHandler <<handler>>
+}
+
+package "Server" {
+    package "Controllers" {
+        class AuthController <<controller>>
+        class ClientController <<controller>>
+        class UsersController <<controller>>
+        class SallesController <<controller>>
+        class MachinesController <<controller>>
+        class SecurityController <<controller>>
+        ' ...autres controllers...
+    }
+    package "Services" {
+        class AuthService <<service>>
+        class ClientService <<service>>
+        class UtilisateurService <<service>>
+        class SalleDeFormationService <<service>>
+        class MachineVirtuelleService <<service>>
+        class SecurityService <<service>>
+        ' ...autres services...
+    }
+    class Program <<startup>>
+}
+
+package "EFModel" {
+    package "Models" {
+        class Client
+        class Utilisateur
+        class SalleDeFormation
+        class MachineVirtuelle
+        class Facture
+        class ProvisionningVM
+        enum RoleUtilisateur
+    }
+    class EClassRoomDbContext
+    class EClassRoomDbContextFactory
+}
+
+package "Shared" {
+    package "Dtos" {
+        class ClientDto
+        class UtilisateurDto
+        class SalleDeFormationDto
+        class MachineVirtuelleDto
+        class FactureDto
+        class ProvisionningResultDto
+        class LoginDto
+        class LoginResultDto
+        ' ...autres DTOs...
+    }
+}
+
+' === RELATIONS PRINCIPALES ===
+
+' Client <-> Server (API)
+ClientsBase ..> ClientDto
+UtilisateursBase ..> UtilisateurDto
+SallesDeFormationBase ..> SalleDeFormationDto
+MachinesVirtuellesBase ..> MachineVirtuelleDto
+Login ..> LoginDto
+SecureLogin ..> LoginDto
+
+' Razor pages utilisent HttpClient (avec handler)
+ClientsBase ..> CustomAuthorizationMessageHandler
+Login ..> CustomAuthorizationMessageHandler
+
+' Server Controllers utilisent Services
+AuthController ..> AuthService
+ClientController ..> ClientService
+UsersController ..> UtilisateurService
+SallesController ..> SalleDeFormationService
+MachinesController ..> MachineVirtuelleService
+SecurityController ..> SecurityService
+
+' Services utilisent EFModel
+ClientService ..> EFModel.Models.Client
+UtilisateurService ..> EFModel.Models.Utilisateur
+SalleDeFormationService ..> EFModel.Models.SalleDeFormation
+MachineVirtuelleService ..> EFModel.Models.MachineVirtuelle
+AuthService ..> EFModel.Models.Utilisateur
+SecurityService ..> AuthService
+
+' EFModel relations
+Client "1" -- "0..*" Utilisateur : Utilisateurs
+Client "1" -- "0..*" SalleDeFormation : Salles
+Client "1" -- "0..*" Facture
+SalleDeFormation "1" -- "0..*" MachineVirtuelle : Machines
+SalleDeFormation "1" -- "0..*" Utilisateur : Stagiaires
+SalleDeFormation "1" -- "0..*" ProvisionningVM
+Utilisateur "1" -- "0..*" MachineVirtuelle : Stagiaire
+Utilisateur "1" -- "0..*" ProvisionningVM : Stagiaire
+
+' DTOs <-> Entities
+ClientDto .. EFModel.Models.Client
+UtilisateurDto .. EFModel.Models.Utilisateur
+SalleDeFormationDto .. EFModel.Models.SalleDeFormation
+MachineVirtuelleDto .. EFModel.Models.MachineVirtuelle
+FactureDto .. EFModel.Models.Facture
+
+' DbContext
+EClassRoomDbContext ..> EFModel.Models.Client
+EClassRoomDbContext ..> EFModel.Models.Utilisateur
+EClassRoomDbContext ..> EFModel.Models.SalleDeFormation
+EClassRoomDbContext ..> EFModel.Models.MachineVirtuelle
+EClassRoomDbContext ..> EFModel.Models.Facture
+EClassRoomDbContext ..> EFModel.Models.ProvisionningVM
+
+' Startup
+Program ..> CustomAuthorizationMessageHandler
+Program ..> AuthService
+Program ..> ClientService
+Program ..> UtilisateurService
+Program ..> SalleDeFormationService
+Program ..> MachineVirtuelleService
+Program ..> SecurityService
+
+' Layout
+MainLayout ..> NavMenu
+
+' Notes (remplacées par des commentaires pour compatibilité PlantUML)
+' ClientsBase : Pages Razor côté client (Blazor) pour la gestion des entités.
+' AuthController : Contrôleur REST pour l'authentification JWT.
+' AuthService : Service d'authentification, génération et validation JWT.
+' EClassRoomDbContext : DbContext Entity Framework pour PostgreSQL.
+' ClientDto : DTO partagé pour la sécurité des échanges.
+
+@enduml
+Service d'authentification, génération et validation JWT.
+</note>
+note right of EClassRoomDbContext
+DbContext Entity Framework pour PostgreSQL.
+</note>
+note right of ClientDto
+DTO partagé pour la sécurité des échanges.
+</note>
+
+@enduml
