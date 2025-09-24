@@ -1,0 +1,73 @@
+@startuml
+title Diagramme des couches : Client ↔ Services ↔ Controller ↔ EFModel
+
+' === PACKAGES ===
+package "Client" {
+    class ClientsBase <<razor page>>
+    class UtilisateursBase <<razor page>>
+    class Login <<razor page>>
+    ' ...autres pages...
+}
+
+package "Server" {
+    package "Controllers" {
+        class ClientController <<controller>>
+        class UsersController <<controller>>
+        class AuthController <<controller>>
+        ' ...autres controllers...
+    }
+    package "Services" {
+        class ClientService <<service>>
+        class UtilisateurService <<service>>
+        class AuthService <<service>>
+        ' ...autres services...
+    }
+}
+
+package "EFModel" {
+    class Client
+    class Utilisateur
+    class SalleDeFormation
+    class MachineVirtuelle
+    class Facture
+    ' ...autres entités...
+}
+
+package "Shared" {
+    class ClientDto
+    class UtilisateurDto
+    class LoginDto
+    ' ...autres DTOs...
+}
+
+' === RELATIONS ===
+
+' Client appelle les contrôleurs via HTTP (API REST)
+ClientsBase ..> ClientController : HTTP (API)
+UtilisateursBase ..> UsersController : HTTP (API)
+Login ..> AuthController : HTTP (API)
+
+' Contrôleurs utilisent les services
+ClientController ..> ClientService
+UsersController ..> UtilisateurService
+AuthController ..> AuthService
+
+' Services utilisent EFModel (DbContext ou entités)
+ClientService ..> Client
+UtilisateurService ..> Utilisateur
+AuthService ..> Utilisateur
+
+' DTOs pour les échanges entre Client et Server
+ClientsBase ..> ClientDto
+ClientController .. ClientDto
+UtilisateursBase ..> UtilisateurDto
+UsersController .. UtilisateurDto
+Login ..> LoginDto
+AuthController .. LoginDto
+
+' Les services peuvent retourner ou accepter des DTOs
+ClientService ..> ClientDto
+UtilisateurService ..> UtilisateurDto
+AuthService ..> LoginDto
+
+@enduml
