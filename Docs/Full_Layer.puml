@@ -1,0 +1,148 @@
+@startuml
+title Diagramme détaillé des couches : Client ↔ Shared ↔ Server (Controllers/Services) ↔ EFModel
+
+' === PACKAGES CLIENT ===
+package "Client" {
+    package "Pages" {
+        class ClientsBase <<razor code-behind>>
+        class UtilisateursBase <<razor code-behind>>
+        class SallesDeFormationBase <<razor code-behind>>
+        class MachinesVirtuellesBase <<razor code-behind>>
+        class Login <<razor code-behind>>
+        class SecureLogin <<razor code-behind>>
+        class Customers <<razor code-behind>>
+        ' ...autres pages Razor...
+    }
+    package "Layout" {
+        class MainLayout <<razor>>
+        class NavMenu <<razor>>
+    }
+    class Program <<startup>>
+    class CustomAuthorizationMessageHandler <<handler>>
+}
+
+' === PACKAGES SHARED ===
+package "Shared" {
+    package "Dtos" {
+        class ClientDto
+        class UtilisateurDto
+        class SalleDeFormationDto
+        class MachineVirtuelleDto
+        class FactureDto
+        class ProvisionningResultDto
+        class LoginDto
+        class LoginResultDto
+        ' ...autres DTOs...
+    }
+}
+
+' === PACKAGES SERVER ===
+package "Server" {
+    package "Controllers" {
+        class AuthController <<controller>>
+        class ClientController <<controller>>
+        class UsersController <<controller>>
+        class SallesController <<controller>>
+        class MachinesController <<controller>>
+        class SecurityController <<controller>>
+        ' ...autres controllers...
+    }
+    package "Services" {
+        class AuthService <<service>>
+        class ClientService <<service>>
+        class UtilisateurService <<service>>
+        class SalleDeFormationService <<service>>
+        class MachineVirtuelleService <<service>>
+        class SecurityService <<service>>
+        class AzureInfrastructureService <<service>>
+        class AzureSalleDeFormationService <<service>>
+        ' ...autres services...
+    }
+    class Program <<startup>>
+}
+
+' === PACKAGES EFModel ===
+package "EFModel" {
+    package "Models" {
+        class Client
+        class Utilisateur
+        class SalleDeFormation
+        class MachineVirtuelle
+        class Facture
+        class ProvisionningVM
+        enum RoleUtilisateur
+    }
+    class EClassRoomDbContext
+    class EClassRoomDbContextFactory
+}
+
+' === RELATIONS CLIENT <-> SHARED <-> SERVER <-> EFModel ===
+
+' Client <-> Shared DTOs
+ClientsBase ..> Shared.Dtos.ClientDto
+UtilisateursBase ..> Shared.Dtos.UtilisateurDto
+SallesDeFormationBase ..> Shared.Dtos.SalleDeFormationDto
+MachinesVirtuellesBase ..> Shared.Dtos.MachineVirtuelleDto
+Login ..> Shared.Dtos.LoginDto
+SecureLogin ..> Shared.Dtos.LoginDto
+
+' Razor pages utilisent HttpClient (avec handler)
+ClientsBase ..> CustomAuthorizationMessageHandler
+Login ..> CustomAuthorizationMessageHandler
+
+' Client appelle les contrôleurs via HTTP (API REST)
+ClientsBase ..> Server.Controllers.ClientController : HTTP (API)
+UtilisateursBase ..> Server.Controllers.UsersController : HTTP (API)
+SallesDeFormationBase ..> Server.Controllers.SallesController : HTTP (API)
+MachinesVirtuellesBase ..> Server.Controllers.MachinesController : HTTP (API)
+Login ..> Server.Controllers.AuthController : HTTP (API)
+SecureLogin ..> Server.Controllers.SecurityController : HTTP (API)
+
+' Controllers utilisent les services
+Server.Controllers.ClientController ..> Server.Services.ClientService
+Server.Controllers.UsersController ..> Server.Services.UtilisateurService
+Server.Controllers.SallesController ..> Server.Services.SalleDeFormationService
+Server.Controllers.MachinesController ..> Server.Services.MachineVirtuelleService
+Server.Controllers.AuthController ..> Server.Services.AuthService
+Server.Controllers.SecurityController ..> Server.Services.SecurityService
+
+' Services utilisent EFModel (DbContext ou entités)
+Server.Services.ClientService ..> EFModel.Models.Client
+Server.Services.UtilisateurService ..> EFModel.Models.Utilisateur
+Server.Services.SalleDeFormationService ..> EFModel.Models.SalleDeFormation
+Server.Services.MachineVirtuelleService ..> EFModel.Models.MachineVirtuelle
+Server.Services.AuthService ..> EFModel.Models.Utilisateur
+Server.Services.SecurityService ..> Server.Services.AuthService
+Server.Services.AzureInfrastructureService ..> EFModel.Models.MachineVirtuelle
+Server.Services.AzureSalleDeFormationService ..> EFModel.Models.SalleDeFormation
+
+' DTOs <-> Entities
+Shared.Dtos.ClientDto .. EFModel.Models.Client
+Shared.Dtos.UtilisateurDto .. EFModel.Models.Utilisateur
+Shared.Dtos.SalleDeFormationDto .. EFModel.Models.SalleDeFormation
+Shared.Dtos.MachineVirtuelleDto .. EFModel.Models.MachineVirtuelle
+Shared.Dtos.FactureDto .. EFModel.Models.Facture
+
+' DbContext
+EClassRoomDbContext ..> EFModel.Models.Client
+EClassRoomDbContext ..> EFModel.Models.Utilisateur
+EClassRoomDbContext ..> EFModel.Models.SalleDeFormation
+EClassRoomDbContext ..> EFModel.Models.MachineVirtuelle
+EClassRoomDbContext ..> EFModel.Models.Facture
+EClassRoomDbContext ..> EFModel.Models.ProvisionningVM
+
+' Startup
+Program ..> CustomAuthorizationMessageHandler
+Program ..> Server.Services.AuthService
+Program ..> Server.Services.ClientService
+Program ..> Server.Services.UtilisateurService
+Program ..> Server.Services.SalleDeFormationService
+Program ..> Server.Services.MachineVirtuelleService
+Program ..> Server.Services.SecurityService
+Program ..> Server.Services.AzureInfrastructureService
+Program ..> Server.Services.AzureSalleDeFormationService
+
+' Layout
+MainLayout ..> NavMenu
+
+@enduml
