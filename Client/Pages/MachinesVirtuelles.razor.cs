@@ -35,7 +35,7 @@ public class MachinesVirtuellesBase : ComponentBase
 
     protected void ShowAddVm()
     {
-    editVm = new MachineVirtuelleDto();
+        editVm = new MachineVirtuelleDto();
         showForm = true;
         isEdit = false;
     }

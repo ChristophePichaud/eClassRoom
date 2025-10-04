@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Shared.Dtos;
-using System.Net.Http.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 
 public class SallesDeFormationBase : ComponentBase
@@ -33,36 +34,57 @@ public class SallesDeFormationBase : ComponentBase
         await LoadFormateurs();
         await LoadClients();
         await LoadSalles();
+
+        // Log the Formateurs and Clients loaded and Salles loaded
+        Console.WriteLine($"Formateurs chargés : {formateurs.Count}");
+        Console.WriteLine($"Clients chargés : {clients.Count}");
+        Console.WriteLine($"Salles chargées : {salles.Count}");
+        Console.WriteLine("Done");
+
+        // Error in the Razor page : An exception was thrown while rendering: Object reference not set to an instance of an object.
+        // Formateurs chargés : 0
+
+        /*
+        Formateurs chargés : 0
+        Clients chargés : 4
+        Salles chargées : 5
+        Done
+        */
     }
 
     protected async Task LoadClients()
     {
-        var token = await GetTokenAsync();
-        if (!string.IsNullOrEmpty(token))
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, "api/clients");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            Http = new HttpClient();
-            Http.BaseAddress = new Uri("http://localhost:5020/");
-            var response = await Http.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                clients = await response.Content.ReadFromJsonAsync<List<ClientDto>>();
-                Console.WriteLine($"Clients chargés : {clients.Count}");
-            }
-            else
-            {
-                clients = new List<ClientDto>();
-                // Optionally handle unauthorized or error cases here
-                Console.WriteLine($"Erreur lors du chargement des clients : {response.StatusCode}");
-            }
-        }
-        else
-        {
-            clients = new List<ClientDto>();
-            // Optionally handle missing token here
-            Console.WriteLine("Token JWT manquant ou invalide.");
-        }
+        Http = new HttpClient();
+        Http.BaseAddress = new Uri("http://localhost:5020/");
+        clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/machines");
+
+
+        //var token = await GetTokenAsync();
+        //if (!string.IsNullOrEmpty(token))
+        //{
+        //    var request = new HttpRequestMessage(HttpMethod.Get, "api/clients");
+        //    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        //    Http = new HttpClient();
+        //    Http.BaseAddress = new Uri("http://localhost:5020/");
+        //    var response = await Http.SendAsync(request);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        clients = await response.Content.ReadFromJsonAsync<List<ClientDto>>();
+        //        Console.WriteLine($"Clients chargés : {clients.Count}");
+        //    }
+        //    else
+        //    {
+        //        clients = new List<ClientDto>();
+        //        // Optionally handle unauthorized or error cases here
+        //        Console.WriteLine($"Erreur lors du chargement des clients : {response.StatusCode}");
+        //    }
+        //}
+        //else
+        //{
+        //    clients = new List<ClientDto>();
+        //    // Optionally handle missing token here
+        //    Console.WriteLine("Token JWT manquant ou invalide.");
+        //}
     }
 
     protected async Task LoadFormateurs()
