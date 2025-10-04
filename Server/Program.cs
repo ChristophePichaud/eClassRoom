@@ -13,10 +13,12 @@ builder.Services.AddScoped<MachineVirtuelleService>();
 builder.Services.AddScoped<SalleDeFormationService>();
 builder.Services.AddScoped<SecurityService>();
 builder.Services.AddScoped<UtilisateurService>();
+builder.Services.AddScoped<SimpleService>();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EClassRoomDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(); // <-- Assure que cette ligne est présente AVANT app.UseSwagger()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient",
@@ -28,6 +30,7 @@ builder.Services.AddCors(options =>
                   .AllowCredentials();
         });
 });
+builder.Services.AddHttpClient();
 
 var secret = builder.Configuration["JwtCredentials:Secret"];
 var secret2 = builder.Configuration.GetSection("JwtCredentials")["Secret"];
@@ -57,8 +60,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 app.UseCors("AllowClient"); // Placez ceci AVANT UseAuthentication et UseAuthorization
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwagger();    // <-- Swagger doit être activé après AddSwaggerGen()
+app.UseSwaggerUI();  // <-- Swagger UI aussi
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
