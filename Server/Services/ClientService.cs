@@ -1,4 +1,5 @@
 using EFModel;
+using EFModel.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared.Dtos;
 using System.Collections.Generic;
@@ -41,13 +42,19 @@ namespace Server.Services
             var entity = await _db.Clients.FindAsync(id);
             if (entity == null) return false;
             entity.NomSociete = dto.NomSociete;
-            entity.Adresse = dto.Adresse;
+            entity.DomainName = dto.DomainName;
+            entity.BillingEmail = dto.BillingEmail;
+            entity.AddressLine1 = dto.AddressLine1;
+            entity.AddressLine2 = dto.AddressLine2;
             entity.CodePostal = dto.CodePostal;
             entity.Ville = dto.Ville;
             entity.Pays = dto.Pays;
-            entity.EmailAdministrateur = dto.EmailAdministrateur;
             entity.Mobile = dto.Mobile;
-            // MotDePasseAdministrateur: à ne pas exposer ni modifier ici pour la sécurité
+            entity.AdminUserId = dto.AdminUserId;
+            if (!string.IsNullOrEmpty(dto.LicenseType) && System.Enum.TryParse<LicenseType>(dto.LicenseType, out var licenseType))
+            {
+                entity.LicenseType = licenseType;
+            }
             await _db.SaveChangesAsync();
             return true;
         }
@@ -65,26 +72,32 @@ namespace Server.Services
         {
             Id = c.Id,
             NomSociete = c.NomSociete,
-            Adresse = c.Adresse,
+            DomainName = c.DomainName,
+            BillingEmail = c.BillingEmail,
+            AddressLine1 = c.AddressLine1,
+            AddressLine2 = c.AddressLine2,
             CodePostal = c.CodePostal,
             Ville = c.Ville,
             Pays = c.Pays,
-            EmailAdministrateur = c.EmailAdministrateur,
-            Mobile = c.Mobile
-            // Ne jamais exposer MotDePasseAdministrateur
+            Mobile = c.Mobile,
+            AdminUserId = c.AdminUserId,
+            LicenseType = c.LicenseType.ToString()
         };
 
         private static Client FromDto(ClientDto dto) => new Client
         {
             Id = dto.Id,
             NomSociete = dto.NomSociete,
-            Adresse = dto.Adresse,
+            DomainName = dto.DomainName,
+            BillingEmail = dto.BillingEmail,
+            AddressLine1 = dto.AddressLine1,
+            AddressLine2 = dto.AddressLine2,
             CodePostal = dto.CodePostal,
             Ville = dto.Ville,
             Pays = dto.Pays,
-            EmailAdministrateur = dto.EmailAdministrateur,
-            Mobile = dto.Mobile
-            // MotDePasseAdministrateur à gérer lors de la création initiale uniquement
+            Mobile = dto.Mobile,
+            AdminUserId = dto.AdminUserId,
+            LicenseType = !string.IsNullOrEmpty(dto.LicenseType) && System.Enum.TryParse<LicenseType>(dto.LicenseType, out var lt) ? lt : LicenseType.Professional
         };
     }
 }

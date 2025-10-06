@@ -1,17 +1,18 @@
 using EFModel;
+using EFModel.Models;
 using Shared.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Services
 {
-    public static class RoleUtilisateurHelper
+    public static class UserRoleHelper
     {
-        public static RoleUtilisateur FromStringToRoleUtilisateur(string value)
+        public static UserRole FromStringToUserRole(string value)
         {
-            return Enum.TryParse<RoleUtilisateur>(value, out var result) ? result : RoleUtilisateur.Stagiaire;
+            return Enum.TryParse<UserRole>(value, out var result) ? result : UserRole.Student;
         }
 
-        public static string ToStringRole(RoleUtilisateur role)
+        public static string ToStringRole(UserRole role)
         {
             return role.ToString();
         }
@@ -36,7 +37,7 @@ namespace Server.Services
                     Nom = u.Nom,
                     Prenom = u.Prenom,
                     MotDePasse = u.MotDePasse,
-                    Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                    Role = UserRoleHelper.ToStringRole(u.Role),
                     ClientId = u.ClientId
                 })
                 .ToListAsync();
@@ -53,7 +54,7 @@ namespace Server.Services
                 Nom = u.Nom,
                 Prenom = u.Prenom,
                 MotDePasse = u.MotDePasse,
-                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                Role = UserRoleHelper.ToStringRole(u.Role),
                 ClientId = u.ClientId
             };
         }
@@ -66,7 +67,7 @@ namespace Server.Services
                 Nom = dto.Nom,
                 Prenom = dto.Prenom,
                 MotDePasse = dto.MotDePasse,
-                Role = RoleUtilisateurHelper.FromStringToRoleUtilisateur(dto.Role),
+                Role = UserRoleHelper.FromStringToUserRole(dto.Role),
                 ClientId = dto.ClientId
             };
             _db.Utilisateurs.Add(u);
@@ -79,7 +80,7 @@ namespace Server.Services
                 Nom = u.Nom,
                 Prenom = u.Prenom,
                 MotDePasse = u.MotDePasse,
-                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                Role = UserRoleHelper.ToStringRole(u.Role),
                 ClientId = u.ClientId
             };
         }
@@ -92,7 +93,7 @@ namespace Server.Services
             u.Nom = dto.Nom;
             u.Prenom = dto.Prenom;
             u.MotDePasse = dto.MotDePasse;
-            u.Role = RoleUtilisateurHelper.FromStringToRoleUtilisateur(dto.Role);
+            u.Role = UserRoleHelper.FromStringToUserRole(dto.Role);
             u.ClientId = dto.ClientId;
             await _db.SaveChangesAsync();
             return new UtilisateurDto
@@ -102,7 +103,7 @@ namespace Server.Services
                 Nom = u.Nom,
                 Prenom = u.Prenom,
                 MotDePasse = u.MotDePasse,
-                Role = RoleUtilisateurHelper.ToStringRole(u.Role),
+                Role = UserRoleHelper.ToStringRole(u.Role),
                 ClientId = u.ClientId
             };
         }

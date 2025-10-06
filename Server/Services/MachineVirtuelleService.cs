@@ -1,4 +1,5 @@
 using EFModel;
+using EFModel.Models;
 using Shared.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,12 +21,17 @@ namespace Server.Services
                 {
                     Id = vm.Id,
                     Name = vm.Name,
-                    TypeOS = vm.TypeOS,
-                    TypeVM = vm.TypeVM,
+                    OwnerId = vm.OwnerId,
+                    VmOsType = vm.VmOsType.ToString(),
+                    VmType = vm.VmType.ToString(),
+                    VmMachineId = vm.VmMachineId,
+                    VmISO = vm.VmISO,
                     Sku = vm.Sku,
                     Offer = vm.Offer,
                     Version = vm.Version,
-                    DiskISO = vm.DiskISO,
+                    RdpInfo = vm.RdpInfo,
+                    PublicIp = vm.PublicIp,
+                    Status = vm.Status.ToString(),
                     NomMarketing = vm.NomMarketing
                 })
                 .ToListAsync();
@@ -39,12 +45,17 @@ namespace Server.Services
             {
                 Id = vm.Id,
                 Name = vm.Name,
-                TypeOS = vm.TypeOS,
-                TypeVM = vm.TypeVM,
+                OwnerId = vm.OwnerId,
+                VmOsType = vm.VmOsType.ToString(),
+                VmType = vm.VmType.ToString(),
+                VmMachineId = vm.VmMachineId,
+                VmISO = vm.VmISO,
                 Sku = vm.Sku,
                 Offer = vm.Offer,
                 Version = vm.Version,
-                DiskISO = vm.DiskISO,
+                RdpInfo = vm.RdpInfo,
+                PublicIp = vm.PublicIp,
+                Status = vm.Status.ToString(),
                 NomMarketing = vm.NomMarketing
             };
         }
@@ -54,12 +65,17 @@ namespace Server.Services
             var vm = new MachineVirtuelle
             {
                 Name = dto.Name,
-                TypeOS = dto.TypeOS,
-                TypeVM = dto.TypeVM,
+                OwnerId = dto.OwnerId,
+                VmOsType = Enum.TryParse<VmOsType>(dto.VmOsType, out var osType) ? osType : VmOsType.Windows,
+                VmType = Enum.TryParse<VmType>(dto.VmType, out var vmType) ? vmType : VmType.Standard_B2s,
+                VmMachineId = dto.VmMachineId,
+                VmISO = dto.VmISO,
                 Sku = dto.Sku,
                 Offer = dto.Offer,
                 Version = dto.Version,
-                DiskISO = dto.DiskISO,
+                RdpInfo = dto.RdpInfo,
+                PublicIp = dto.PublicIp,
+                Status = Enum.TryParse<VmStatus>(dto.Status, out var status) ? status : VmStatus.NotCreated,
                 NomMarketing = dto.NomMarketing
             };
             _db.MachinesVirtuelles.Add(vm);
@@ -71,12 +87,20 @@ namespace Server.Services
             var vm = await _db.MachinesVirtuelles.FindAsync(id);
             if (vm == null) return;
             vm.Name = dto.Name;
-            vm.TypeOS = dto.TypeOS;
-            vm.TypeVM = dto.TypeVM;
+            vm.OwnerId = dto.OwnerId;
+            if (Enum.TryParse<VmOsType>(dto.VmOsType, out var osType))
+                vm.VmOsType = osType;
+            if (Enum.TryParse<VmType>(dto.VmType, out var vmType))
+                vm.VmType = vmType;
+            vm.VmMachineId = dto.VmMachineId;
+            vm.VmISO = dto.VmISO;
             vm.Sku = dto.Sku;
             vm.Offer = dto.Offer;
             vm.Version = dto.Version;
-            vm.DiskISO = dto.DiskISO;
+            vm.RdpInfo = dto.RdpInfo;
+            vm.PublicIp = dto.PublicIp;
+            if (Enum.TryParse<VmStatus>(dto.Status, out var status))
+                vm.Status = status;
             vm.NomMarketing = dto.NomMarketing;
             await _db.SaveChangesAsync();
         }
