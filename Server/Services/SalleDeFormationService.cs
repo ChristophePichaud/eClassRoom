@@ -1,4 +1,5 @@
 using EFModel;
+using EFModel.Models;
 using Shared.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,14 +28,18 @@ namespace Server.Services
                     {
                         Id = s.Client.Id,
                         NomSociete = s.Client.NomSociete,
-                        Adresse = s.Client.Adresse,
+                        DomainName = s.Client.DomainName,
+                        BillingEmail = s.Client.BillingEmail,
+                        AddressLine1 = s.Client.AddressLine1,
+                        AddressLine2 = s.Client.AddressLine2,
                         CodePostal = s.Client.CodePostal,
                         Ville = s.Client.Ville,
                         Pays = s.Client.Pays,
-                        EmailAdministrateur = s.Client.EmailAdministrateur,
-                        Mobile = s.Client.Mobile
+                        Mobile = s.Client.Mobile,
+                        AdminUserId = s.Client.AdminUserId,
+                        LicenseType = s.Client.LicenseType.ToString()
                     } : null,
-                    FormateurId = s.FormateurId,
+                    CreatedBy = s.CreatedBy,
                     Formateur = s.Formateur != null ? new UtilisateurDto
                     {
                         Id = s.Formateur.Id,
@@ -61,16 +66,18 @@ namespace Server.Services
                     {
                         Id = m.Id,
                         Name = m.Name,
-                        TypeOS = m.TypeOS,
-                        TypeVM = m.TypeVM,
+                        OwnerId = m.OwnerId,
+                        VmOsType = m.VmOsType.ToString(),
+                        VmType = m.VmType.ToString(),
+                        VmMachineId = m.VmMachineId,
+                        VmISO = m.VmISO,
                         Sku = m.Sku,
                         Offer = m.Offer,
                         Version = m.Version,
-                        DiskISO = m.DiskISO,
-                        NomMarketing = m.NomMarketing,
-                        FichierRDP = m.FichierRDP,
-                        Supervision = m.Supervision,
-                        StagiaireId = m.StagiaireId
+                        RdpInfo = m.RdpInfo,
+                        PublicIp = m.PublicIp,
+                        Status = m.Status.ToString(),
+                        NomMarketing = m.NomMarketing
                     }).ToList()
                 })
                 .ToListAsync();
@@ -92,14 +99,18 @@ namespace Server.Services
                 {
                     Id = s.Client.Id,
                     NomSociete = s.Client.NomSociete,
-                    Adresse = s.Client.Adresse,
+                    DomainName = s.Client.DomainName,
+                    BillingEmail = s.Client.BillingEmail,
+                    AddressLine1 = s.Client.AddressLine1,
+                    AddressLine2 = s.Client.AddressLine2,
                     CodePostal = s.Client.CodePostal,
                     Ville = s.Client.Ville,
                     Pays = s.Client.Pays,
-                    EmailAdministrateur = s.Client.EmailAdministrateur,
-                    Mobile = s.Client.Mobile
+                    Mobile = s.Client.Mobile,
+                    AdminUserId = s.Client.AdminUserId,
+                    LicenseType = s.Client.LicenseType.ToString()
                 } : null,
-                FormateurId = s.FormateurId,
+                CreatedBy = s.CreatedBy,
                 Formateur = s.Formateur != null ? new UtilisateurDto
                 {
                     Id = s.Formateur.Id,
@@ -126,16 +137,18 @@ namespace Server.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    TypeOS = m.TypeOS,
-                    TypeVM = m.TypeVM,
+                    OwnerId = m.OwnerId,
+                    VmOsType = m.VmOsType.ToString(),
+                    VmType = m.VmType.ToString(),
+                    VmMachineId = m.VmMachineId,
+                    VmISO = m.VmISO,
                     Sku = m.Sku,
                     Offer = m.Offer,
                     Version = m.Version,
-                    DiskISO = m.DiskISO,
-                    NomMarketing = m.NomMarketing,
-                    FichierRDP = m.FichierRDP,
-                    Supervision = m.Supervision,
-                    StagiaireId = m.StagiaireId
+                    RdpInfo = m.RdpInfo,
+                    PublicIp = m.PublicIp,
+                    Status = m.Status.ToString(),
+                    NomMarketing = m.NomMarketing
                 }).ToList()
             };
         }
@@ -146,7 +159,7 @@ namespace Server.Services
             {
                 Nom = dto.Nom,
                 ClientId = dto.ClientId, // Utiliser uniquement l'ID
-                FormateurId = dto.FormateurId,
+                CreatedBy = dto.CreatedBy,
                 DateDebut = dto.DateDebut,
                 DateFin = dto.DateFin,
                 // Machines et Stagiaires à gérer selon la logique métier
@@ -207,14 +220,18 @@ namespace Server.Services
                 {
                     Id = s.Client.Id,
                     NomSociete = s.Client.NomSociete,
-                    Adresse = s.Client.Adresse,
+                    DomainName = s.Client.DomainName,
+                    BillingEmail = s.Client.BillingEmail,
+                    AddressLine1 = s.Client.AddressLine1,
+                    AddressLine2 = s.Client.AddressLine2,
                     CodePostal = s.Client.CodePostal,
                     Ville = s.Client.Ville,
                     Pays = s.Client.Pays,
-                    EmailAdministrateur = s.Client.EmailAdministrateur,
-                    Mobile = s.Client.Mobile
+                    Mobile = s.Client.Mobile,
+                    AdminUserId = s.Client.AdminUserId,
+                    LicenseType = s.Client.LicenseType.ToString()
                 } : null,
-                FormateurId = s.FormateurId,
+                CreatedBy = s.CreatedBy,
                 Formateur = s.Formateur != null ? new UtilisateurDto
                 {
                     Id = s.Formateur.Id,
@@ -241,16 +258,18 @@ namespace Server.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    TypeOS = m.TypeOS,
-                    TypeVM = m.TypeVM,
+                    OwnerId = m.OwnerId,
+                    VmOsType = m.VmOsType.ToString(),
+                    VmType = m.VmType.ToString(),
+                    VmMachineId = m.VmMachineId,
+                    VmISO = m.VmISO,
                     Sku = m.Sku,
                     Offer = m.Offer,
                     Version = m.Version,
-                    DiskISO = m.DiskISO,
-                    NomMarketing = m.NomMarketing, // Utilise le nouveau nom
-                    FichierRDP = m.FichierRDP,
-                    Supervision = m.Supervision,
-                    StagiaireId = m.StagiaireId
+                    RdpInfo = m.RdpInfo,
+                    PublicIp = m.PublicIp,
+                    Status = m.Status.ToString(),
+                    NomMarketing = m.NomMarketing
                 }).ToList()
             };
         }
