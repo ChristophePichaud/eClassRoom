@@ -53,11 +53,11 @@ namespace EFModel
 
             // SalleDeFormation - Stagiaires (many-to-many possible, à adapter si navigation)
 
-            // MachineVirtuelle - Stagiaire
+            // MachineVirtuelle - Stagiaire (Owner)
             modelBuilder.Entity<MachineVirtuelle>()
                 .HasOne(m => m.Stagiaire)
                 .WithMany()
-                .HasForeignKey(m => m.StagiaireId);
+                .HasForeignKey(m => m.OwnerId);
 
             // Many-to-many SalleDeFormation <-> MachineVirtuelle
             modelBuilder.Entity<SalleDeFormation>()
@@ -77,11 +77,11 @@ namespace EFModel
                         .OnDelete(DeleteBehavior.Cascade)
                 );
 
-            // SalleDeFormation - Formateur (Utilisateur)
+            // SalleDeFormation - Formateur (Utilisateur who created it)
             modelBuilder.Entity<SalleDeFormation>()
                 .HasOne(s => s.Formateur)
                 .WithMany()
-                .HasForeignKey(s => s.FormateurId)
+                .HasForeignKey(s => s.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
